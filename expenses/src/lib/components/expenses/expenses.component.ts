@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common'
     selector: 'front-lucca-test-expenses',
     standalone: true,
     imports: [CommonModule],
-    templateUrl: './expenses.component.html',
+    template: ``,
     styleUrls: ['./expenses.component.css'],
 })
 export class ExpensesComponent {}
