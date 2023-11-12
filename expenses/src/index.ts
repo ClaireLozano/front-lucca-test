@@ -1,1 +1,1 @@
-export * from './lib/expenses/expenses.component'
+export * from './lib/components/expenses/expenses.component';

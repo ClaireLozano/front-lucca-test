@@ -1,4 +1,8 @@
-import { Route } from '@angular/router'
-import { ExpensesComponent } from '@front-lucca-test/expenses'
+import { Route } from '@angular/router';
 
-export const appRoutes: Route[] = [{ path: '/', component: ExpensesComponent }]
+export const appRoutes: Route[] = [
+	{
+		path: '',
+		loadComponent: () => import('@front-lucca-test/expenses').then((m) => m.ExpensesComponent),
+	},
+];
