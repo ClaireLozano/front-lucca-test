@@ -1,14 +1,12 @@
-import { Injectable } from '@angular/core'
+import { Injectable } from '@angular/core';
 
-@Injectable({
-    providedIn: 'root',
-})
+@Injectable()
 export class ExpensesService {
-    constructor() {}
+	constructor() {}
 
-    // get expenses
+	// get expenses
 
-    // set expense
+	// set expense
 
-    // add expense
+	// add expense
 }

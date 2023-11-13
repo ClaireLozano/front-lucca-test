@@ -2,10 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-	selector: 'front-lucca-test-expenses',
+	selector: 'exp-expenses',
 	standalone: true,
 	imports: [CommonModule],
-	template: ``,
+	template: `<p>expenses page</p>`,
 	styleUrls: ['./expenses.component.css'],
 })
 export class ExpensesComponent {}
+
+// resolver before display

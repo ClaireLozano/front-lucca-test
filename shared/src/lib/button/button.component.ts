@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-	selector: 'front-lucca-test-shared',
+	selector: 'shared-button',
 	standalone: true,
 	imports: [CommonModule],
-	templateUrl: './shared.component.html',
-	styleUrls: ['./shared.component.css'],
+	template: `<p>button works!</p>`,
+	styleUrls: ['./button.component.css'],
 })
-export class SharedComponent {}
+export class ButtonComponent {}

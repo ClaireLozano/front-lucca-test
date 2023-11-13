@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core'
+import { Injectable } from '@angular/core';
 
-@Injectable({
-    providedIn: 'root',
-})
+@Injectable()
 export class ExpensesResolver {
-    constructor() {}
+	constructor() {}
+
+	// Get expenses
 }
