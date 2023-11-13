@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class ExpensesResolver {
+export class ExpensesPageResolver {
 	constructor() {}
 
 	// Get expenses
