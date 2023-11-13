@@ -15,7 +15,8 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"@front-lucca-test/expenses": ["expenses/src/index.ts"]
+			"@front-lucca-test/expenses": ["expenses/src/index.ts"],
+			"@front-lucca-test/shared": ["shared/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]
