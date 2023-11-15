@@ -5,6 +5,6 @@ import { RouterModule } from '@angular/router';
 	standalone: true,
 	imports: [RouterModule],
 	selector: 'front-lucca-test-root',
-	template: '<p>Hello World</p>',
+	template: '<router-outlet></router-outlet>',
 })
 export class AppComponent {}

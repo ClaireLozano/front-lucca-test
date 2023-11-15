@@ -1,11 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
 	selector: 'shared-button',
 	standalone: true,
 	imports: [CommonModule],
-	template: `<p>button works!</p>`,
+	template: ` <button [attr.type]="type" (click)="onClick()" (touche)="onClick()">{{ label }}</button> `,
 	styleUrls: ['./button.component.css'],
 })
-export class ButtonComponent {}
+export class ButtonComponent {
+	@Input({ required: true })
+	public label!: string;
+
+	@Input()
+	public type: 'button' | 'submit' = 'button';
+
+	@Output() public submitButtonEmitter: EventEmitter<void> = new EventEmitter();
+
+	public onClick() {
+		this.submitButtonEmitter.emit();
+	}
+}
