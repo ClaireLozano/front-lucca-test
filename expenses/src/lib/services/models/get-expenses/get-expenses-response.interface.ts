@@ -1,4 +1,4 @@
-import { Expense } from './expense.interface';
+import { Expense } from '../expense/expense.interface';
 
 export interface ResponseGetExpenses {
 	items: Expense[];

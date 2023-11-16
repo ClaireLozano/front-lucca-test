@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 	standalone: true,
 	imports: [CommonModule],
 	template: ` <button [attr.type]="type" (click)="onSubmitButton()" (touche)="onSubmitButton()">{{ label }}</button> `,
-	styleUrls: ['./button.component.css'],
 })
 export class ButtonComponent {
 	@Input({ required: true })

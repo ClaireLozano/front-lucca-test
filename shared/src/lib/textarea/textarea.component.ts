@@ -6,13 +6,20 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 	selector: 'shared-textarea',
 	standalone: true,
 	imports: [CommonModule, ReactiveFormsModule],
-	styleUrls: ['./textarea.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	styles: [
+		`
+			.error-input {
+				border: 1px solid red;
+			}
+		`,
+	],
 	template: `<label>
 		{{ label }}
 		@if(isRequired) {*}
 		<br />
-		<textarea [formControl]="control" [required]="isRequired" rows="4" cols="50"> </textarea>
+		<textarea [formControl]="control" [required]="isRequired" rows="4" cols="50" [class.error-input]="control.invalid && control.touched">
+		</textarea>
 	</label>`,
 })
 export class TextAreaComponent {

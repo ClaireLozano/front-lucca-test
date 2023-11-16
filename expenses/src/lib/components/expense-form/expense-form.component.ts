@@ -1,15 +1,14 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, Signal, signal } from '@angular/core';
-import { Expense } from '../../services/models/expense.interface';
+import { Expense } from '../../services/models/expense/expense.interface';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ExpensesService } from '../../services/expenses.service';
 import { Subscription } from 'rxjs';
-import { RequestAddExpenses, RequestEditExpenses } from '../../services/models/requests.interface';
+import { RequestEditExpenses } from '../../services/models/edit-expense/edit-expense-request.interface';
+import { getEditExpenseRequest, getAddExpenseRequest } from '../../services/expenses-mapping.utils';
 
-// Todo : commenter les fonctions pour dire à quoi elles servent, se qu'elles prennent en entré et en sortie
 // Todo : creer un fichier de constante pour y mettre tous les types de form control et les options du select
 @Component({
 	selector: 'exp-expense-form',
-	styleUrls: ['./expense-form.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: ` <h2>{{ title }}</h2>
 		Champs obligatoires *<br /><br />
@@ -56,7 +55,6 @@ import { RequestAddExpenses, RequestEditExpenses } from '../../services/models/r
 		</form>`,
 })
 export class ExpenseFormComponent implements OnInit, OnDestroy {
-	// Input
 	@Input()
 	public expense?: Expense;
 
@@ -66,7 +64,6 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	@Input({ required: true })
 	public action!: 'edit' | 'add';
 
-	// Emmiter
 	@Output() public submitExpenseEmitter: EventEmitter<void> = new EventEmitter();
 	@Output() public cancelExpenseEmitter: EventEmitter<void> = new EventEmitter();
 
@@ -153,23 +150,26 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	 * Used for the edition of an expense or creation of new one
 	 */
 	public onSubmit(): void {
+		this.errorFormSignal = signal(undefined);
+
 		if (!this.form.valid) {
 			this.errorFormSignal = signal('invalid');
+			return;
 		}
 
 		if (this.form.pristine) {
 			this.errorFormSignal = signal('pristine');
+			return;
 		}
-
-		this.errorFormSignal = signal(undefined);
 
 		// Edit expense
 		if (this.action === 'edit') {
-			const request = this.getEditExpenseRequest();
-
-			if (!request) {
+			if (!this.expense?.id) {
 				this.errorFormSignal = signal('invalid');
+				return;
 			}
+
+			const request = getEditExpenseRequest(this.expense.id, this.form);
 
 			this.subscription.add(
 				this.expensesService.editExpense(request as RequestEditExpenses).subscribe(
@@ -186,7 +186,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		}
 
 		// Add new expense
-		const request = this.getAddExpenseRequest();
+		const request = getAddExpenseRequest(this.form);
 
 		this.subscription.add(
 			this.expensesService.addExpense(request).subscribe(
@@ -215,69 +215,8 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		this.form.get('purchasedOn')?.patchValue(this.expense.purchasedOn);
 		if (this.expense?.nature === 'trip') {
 			this.form.get('distance')?.patchValue(this.expense.distance);
-		} else {
-			this.form.get('invites')?.patchValue(this.expense?.invites);
-		}
-	}
-
-	// Todo : Voir si c'est possible d'optimiser c'est 2 fonctions, pour le moment je suis bloqué par le typage
-	// et je n'ai pas beaucoup de temps devant moi pour y consacrer plus de temps...
-	// Ptet voir pour créer un utils.ts avec le service qui prendrait en entré un formgroup et qui renvoie la requete
-	private getEditExpenseRequest(): RequestEditExpenses | void {
-		if (!this.expense) {
 			return;
 		}
-
-		let request: RequestEditExpenses;
-
-		const formData = this.form.value;
-
-		if (formData.nature === 'restaurant') {
-			request = {
-				id: this.expense.id,
-				amount: parseFloat(formData.amount),
-				comment: formData.comment,
-				purchasedOn: formData.purchasedOn,
-				nature: formData.nature,
-				invites: parseInt(formData.invites),
-			};
-		} else {
-			request = {
-				id: this.expense.id,
-				amount: parseFloat(formData.amount),
-				comment: formData.comment,
-				purchasedOn: formData.purchasedOn,
-				nature: formData.nature,
-				distance: parseInt(formData.distance),
-			};
-		}
-
-		return request;
-	}
-
-	private getAddExpenseRequest(): RequestAddExpenses {
-		let request: RequestAddExpenses;
-
-		const formData = this.form.value;
-
-		if (formData.nature === 'restaurant') {
-			request = {
-				amount: parseFloat(formData.amount),
-				comment: formData.comment,
-				purchasedOn: formData.purchasedOn,
-				nature: formData.nature,
-				invites: parseInt(formData.invites),
-			};
-		} else {
-			request = {
-				amount: parseFloat(formData.amount),
-				comment: formData.comment,
-				purchasedOn: formData.purchasedOn,
-				nature: formData.nature,
-				distance: parseInt(formData.distance),
-			};
-		}
-
-		return request;
+		this.form.get('invites')?.patchValue(this.expense?.invites);
 	}
 }

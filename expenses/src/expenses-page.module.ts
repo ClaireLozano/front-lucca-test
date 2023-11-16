@@ -8,20 +8,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { ExpensesService } from './lib/services/expenses.service';
 import { ExpensesPageResolver } from './lib/resolvers/expenses-page-resolver.service';
 import { CommonModule } from '@angular/common';
-import {
-	ButtonComponent,
-	InputComponent,
-	SelectInputComponent,
-	TextAreaComponent,
-} from '@front-lucca-test/shared';
+import { ButtonComponent, InputComponent, SelectInputComponent, TextAreaComponent } from '@front-lucca-test/shared';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { GetExpensesAction } from './lib/states/expenses.action';
 
 @NgModule({
-	declarations: [
-		ExpensesPageComponent,
-		ExpenseFormComponent,
-		ExpenseDisplayComponent,
-	],
+	declarations: [ExpensesPageComponent, ExpenseFormComponent, ExpenseDisplayComponent],
 	imports: [
 		ExpensesPageRoutingModule,
 		HttpClientModule,
@@ -31,6 +25,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 		SelectInputComponent,
 		InputComponent,
 		ReactiveFormsModule,
+		NgxsModule.forRoot([GetExpensesAction]),
+		NgxsReduxDevtoolsPluginModule.forRoot(),
 	],
 	providers: [ExpensesService, ExpensesPageResolver],
 })

@@ -6,13 +6,19 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 	selector: 'shared-input',
 	standalone: true,
 	imports: [CommonModule, ReactiveFormsModule],
-	styleUrls: ['./input.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	styles: [
+		`
+			.error-input {
+				border: 1px solid red;
+			}
+		`,
+	],
 	template: `<label>
 		{{ label }}
 		@if(isRequired) {*}
 		<br />
-		<input [formControl]="control" [type]="type" [required]="isRequired" />
+		<input [formControl]="control" [type]="type" [required]="isRequired" [class.error-input]="control.invalid && control.touched" />
 	</label>`,
 })
 export class InputComponent {

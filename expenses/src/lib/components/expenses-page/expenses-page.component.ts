@@ -1,6 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Signal, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Expense } from '../../services/models/expense.interface';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Signal, signal } from '@angular/core';
+import { Expense } from '../../services/models/expense/expense.interface';
+import { Select, Store } from '@ngxs/store';
+import { ExpensesState } from '../../states/expenses.state';
+import { Observable } from 'rxjs';
+import { GetExpensesAction } from '../../states/expenses.action';
 
 // Todo : faire plutot 3 vrai page avec navigation SPA
 // Si on edit pas ou modifie pas, on met pas a jour le state
@@ -10,7 +13,6 @@ import { Expense } from '../../services/models/expense.interface';
 // Todo : les TU
 @Component({
 	selector: 'exp-expenses-page',
-	styleUrls: ['./expenses-page.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 		<h1>Expenses page</h1>
@@ -26,20 +28,21 @@ import { Expense } from '../../services/models/expense.interface';
 		}
 
 		<!-- Add expense button -->
-		@if (statePageSignal() === 'display' && expensesSignal()) {
+		@if (statePageSignal() === 'display' && (expenses$ | async)) {
 		<shared-button [label]="'Saisir une nouvelle dépense'" (submitButtonEmitter)="onAddExpense()"> </shared-button>
 		<br />
 
 		<!-- Number expenses -->
 		<h2>Nombre de dépenses :</h2>
-		<p>{{ numberExpensesSignal() || '0' }}</p>
+		<p>{{ (countExpenses$ | async) || '0' }}</p>
 
 		<!-- Display expenses -->
+		<!-- Si jamais le composant devient trop gros, le mettre dans un autre composant 'expenses-list' -->
 		<h2>Liste des dépenses :</h2>
 		<ul>
-			@for (expense of expensesSignal(); track expense.id) {
+			@for (expense of (expenses$ | async); track expense.id) {
 			<li>
-				<exp-expense-display [expense]="expense" (editExpenseEmitter)="editExpense($event)"> </exp-expense-display>
+				<exp-expense-display [expense]="expense" (clickedExpenseEmitter)="editExpense($event)"> </exp-expense-display>
 			</li>
 			}
 		</ul>
@@ -57,33 +60,46 @@ import { Expense } from '../../services/models/expense.interface';
 		}
 	`,
 })
-export class ExpensesPageComponent implements OnInit {
-	public expensesSignal!: Signal<Expense[]>;
-	public numberExpensesSignal!: Signal<number>;
+export class ExpensesPageComponent {
+	// Get data from resolver
+	@Select(ExpensesState.getExpenses) expenses$!: Observable<Expense[]>;
+	@Select(ExpensesState.getNumberExpenses) countExpenses$!: Observable<number>;
+
+	// State of page view
 	public statePageSignal: Signal<'display' | 'edit' | 'add'> = signal('display');
+
 	public expenseToEditSignal!: Signal<Expense>;
 
-	constructor(private route: ActivatedRoute, private cdr: ChangeDetectorRef) {}
+	constructor(private cdr: ChangeDetectorRef, private store: Store) {}
 
-	public ngOnInit(): void {
-		this.numberExpensesSignal = signal(this.route.snapshot.data['expenses'].count);
-		this.expensesSignal = signal(this.route.snapshot.data['expenses'].items as Expense[]);
-	}
-
+	/**
+	 * Display edit expense view
+	 */
 	public editExpense(expense: Expense): void {
 		this.expenseToEditSignal = signal(expense);
 		this.statePageSignal = signal('edit');
 	}
 
+	/**
+	 * Display list expenses view on cancel form
+	 */
 	public cancelForm(): void {
 		this.statePageSignal = signal('display');
 	}
 
+	/**
+	 * On form submit
+	 */
 	public formSubmit(): void {
+		this.store.dispatch(new GetExpensesAction({ page: 2, limit: 5 }));
+
 		this.statePageSignal = signal('display');
 		alert('Votre dépense à bien été saisie !');
 	}
 
+	/**
+	 * Display add expense view
+	 */
 	public onAddExpense(): void {
 		this.statePageSignal = signal('add');
 		this.cdr.markForCheck();

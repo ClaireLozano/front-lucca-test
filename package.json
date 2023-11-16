@@ -20,6 +20,8 @@
 		"@angular/platform-server": "~17.0.0",
 		"@angular/router": "~17.0.0",
 		"@angular/ssr": "~17.0.0",
+		"@ngxs/devtools-plugin": "^3.8.1",
+		"@ngxs/store": "^3.8.1",
 		"@nx/angular": "17.1.1",
 		"express": "~4.18.2",
 		"react": "^18.2.0",

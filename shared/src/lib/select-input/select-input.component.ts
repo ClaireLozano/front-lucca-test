@@ -6,14 +6,27 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 	selector: 'shared-select-input',
 	standalone: true,
 	imports: [CommonModule, ReactiveFormsModule],
-	styleUrls: ['./select-input.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	styles: [
+		`
+			.error-input {
+				border: 1px solid red;
+			}
+		`,
+	],
 	template: `<label>
 		{{ label }}
 
 		@if(isRequired) {*}
 		<br />
-		<select [formControl]="control" rows="4" cols="50" [disabled]="isDisabled" [required]="isRequired">
+		<select
+			[formControl]="control"
+			rows="4"
+			cols="50"
+			[disabled]="isDisabled"
+			[required]="isRequired"
+			[class.error-input]="control.invalid && control.touched"
+		>
 			<option *ngFor="let option of options" [value]="option.value">
 				{{ option.label }}
 			</option>
