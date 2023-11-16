@@ -1,6 +1,6 @@
 interface BaseExpense {
 	id: number;
-	amount: string;
+	amount: number;
 	comment: string;
 	purchasedOn: string;
 	updatedAt: string;
@@ -8,7 +8,7 @@ interface BaseExpense {
 
 export interface TripExpense extends BaseExpense {
 	nature: 'trip';
-	distance: string;
+	distance: number;
 }
 
 export interface RestaurantExpense extends BaseExpense {

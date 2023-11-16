@@ -1,14 +1,14 @@
 // Add expense
 export interface RequestAddTripExpenses {
-	amount: string;
+	amount: number;
 	comment: string;
 	purchasedOn: string;
 	nature: 'trip';
-	distance: string;
+	distance: number;
 }
 
 export interface RequestAddRestaurantExpenses {
-	amount: string;
+	amount: number;
 	comment: string;
 	purchasedOn: string;
 	nature: 'restaurant';
@@ -20,16 +20,16 @@ export type RequestAddExpenses = RequestAddTripExpenses | RequestAddRestaurantEx
 // Edit expense
 export interface RequestEditTripExpenses {
 	id: number;
-	amount: string;
+	amount: number;
 	comment: string;
 	purchasedOn: string;
 	nature: 'trip';
-	distance: string;
+	distance: number;
 }
 
 export interface RequestEditRestaurantExpenses {
 	id: number;
-	amount: string;
+	amount: number;
 	comment: string;
 	purchasedOn: string;
 	nature: 'restaurant';

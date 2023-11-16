@@ -73,7 +73,8 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	// Form
 	// Todo : typer le formulaire, et pourquoi pas mettre le type dans un interface.ts
 	public natureControl: FormControl = new FormControl('restaurant', Validators.required);
-	public amountControl: FormControl = new FormControl('', Validators.required);
+	// Todo : montant non null
+	public amountControl: FormControl = new FormControl(0, Validators.required);
 	public commentControl: FormControl = new FormControl('', Validators.required);
 	public purchasedOnControl: FormControl = new FormControl('', Validators.required);
 	public form: FormGroup = new FormGroup({
@@ -82,8 +83,9 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		comment: this.commentControl,
 		purchasedOn: this.purchasedOnControl,
 	});
-	public distanceControl: FormControl = new FormControl('', Validators.required);
-	public invitesControl: FormControl = new FormControl('', Validators.required);
+	// Todo : voir pour rajouter des règles de gestion dans les inputs, un input de type number autorise certains char comme "E"
+	public distanceControl: FormControl = new FormControl(0, Validators.required);
+	public invitesControl: FormControl = new FormControl(0, Validators.required);
 	public options: { value: string; label: string }[] = [
 		{ value: 'restaurant', label: 'Restaurant' },
 		{ value: 'trip', label: 'Trip' },
@@ -233,20 +235,20 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		if (formData.nature === 'restaurant') {
 			request = {
 				id: this.expense.id,
-				amount: formData.amount,
+				amount: parseFloat(formData.amount),
 				comment: formData.comment,
 				purchasedOn: formData.purchasedOn,
 				nature: formData.nature,
-				invites: formData.invites,
+				invites: parseInt(formData.invites),
 			};
 		} else {
 			request = {
 				id: this.expense.id,
-				amount: formData.amount,
+				amount: parseFloat(formData.amount),
 				comment: formData.comment,
 				purchasedOn: formData.purchasedOn,
 				nature: formData.nature,
-				distance: formData.distance,
+				distance: parseInt(formData.distance),
 			};
 		}
 
@@ -260,19 +262,19 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 
 		if (formData.nature === 'restaurant') {
 			request = {
-				amount: formData.amount,
+				amount: parseFloat(formData.amount),
 				comment: formData.comment,
 				purchasedOn: formData.purchasedOn,
 				nature: formData.nature,
-				invites: formData.invites,
+				invites: parseInt(formData.invites),
 			};
 		} else {
 			request = {
-				amount: formData.amount,
+				amount: parseFloat(formData.amount),
 				comment: formData.comment,
 				purchasedOn: formData.purchasedOn,
 				nature: formData.nature,
-				distance: formData.distance,
+				distance: parseInt(formData.distance),
 			};
 		}
 

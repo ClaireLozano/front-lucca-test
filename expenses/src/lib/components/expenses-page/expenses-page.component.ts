@@ -2,6 +2,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Signal, 
 import { ActivatedRoute } from '@angular/router';
 import { Expense } from '../../services/models/expense.interface';
 
+// Todo : faire plutot 3 vrai page avec navigation SPA
+// Si on edit pas ou modifie pas, on met pas a jour le state
+
+// Todo : faire un affichage un peu plus sympa pour l'affichage des différentes dépenses
+
+// Todo : les TU
 @Component({
 	selector: 'exp-expenses-page',
 	styleUrls: ['./expenses-page.component.css'],
