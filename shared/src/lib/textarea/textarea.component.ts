@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
 	selector: 'shared-textarea',
 	standalone: true,
-	imports: [CommonModule, ReactiveFormsModule, FormsModule],
+	imports: [CommonModule, ReactiveFormsModule],
 	styleUrls: ['./textarea.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `<label>
 		{{ label }}
-		@if(required) {*}
+		@if(isRequired) {*}
 		<br />
-		<textarea formControlName="comment" [required]="required" rows="4" cols="50"> </textarea>
+		<textarea [formControl]="control" [required]="isRequired" rows="4" cols="50"> </textarea>
 	</label>`,
 })
 export class TextAreaComponent {
@@ -23,8 +23,8 @@ export class TextAreaComponent {
 	public label!: string;
 
 	@Input({ required: true })
-	public formControl!: FormControl;
+	public control!: FormControl;
 
 	@Input()
-	public required: boolean = false;
+	public isRequired: boolean = false;
 }

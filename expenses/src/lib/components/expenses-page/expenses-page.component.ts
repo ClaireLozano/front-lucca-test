@@ -9,9 +9,22 @@ import { Expense } from '../../model/expense.interface';
 	template: `
 		<h1>Expenses page</h1>
 
-		<shared-button [label]="'Saisir une nouvelle dépense'" (onSubmitButton)="onAddExpense()"></shared-button><br />
+		<!-- Add expense -->
+		@if (statePageSignal() === 'add') {
+		<exp-expense-form
+			[action]="'add'"
+			[title]="'Saisir une dépense'"
+			(submitExpenseEmitter)="formSubmit()"
+			(cancelExpenseEmitter)="cancelForm()"
+		></exp-expense-form>
+		}
 
+		<!-- Add expense button -->
 		@if (statePageSignal() === 'display' && expensesSignal()) {
+		<shared-button [label]="'Saisir une nouvelle dépense'" (submitButtonEmitter)="onAddExpense()"> </shared-button>
+		<br />
+
+		<!-- Number expenses -->
 		<h2>Nombre de dépenses :</h2>
 		<p>{{ numberExpensesSignal() || '0' }}</p>
 
@@ -19,19 +32,22 @@ import { Expense } from '../../model/expense.interface';
 		<h2>Liste des dépenses :</h2>
 		<ul>
 			@for (expense of expensesSignal(); track expense.id) {
-			<li><exp-expense-display [expense]="expense" (editExpenseEmitter)="editExpense($event)"></exp-expense-display></li>
+			<li>
+				<exp-expense-display [expense]="expense" (editExpenseEmitter)="editExpense($event)"> </exp-expense-display>
+			</li>
 			}
 		</ul>
 		}
 
 		<!-- Edit expense -->
 		@if (statePageSignal() === 'edit') {
-		<exp-expense-form [expense]="expenseToEditSignal()" [action]="'edit'" [title]="'Editer une dépense'" (formSubmitEmitter)="formSubmit()"></exp-expense-form>
-		}
-
-		<!-- Add expense -->
-		@if (statePageSignal() === 'add') {
-		<exp-expense-form [expense]="expenseToEditSignal()" [action]="'add'" [title]="'Saisir une dépense'" (formSubmitEmitter)="formSubmit()"></exp-expense-form>
+		<exp-expense-form
+			[expense]="expenseToEditSignal()"
+			[action]="'edit'"
+			[title]="'Editer une dépense'"
+			(submitExpenseEmitter)="formSubmit()"
+			(cancelExpenseEmitter)="cancelForm()"
+		></exp-expense-form>
 		}
 	`,
 })
@@ -51,7 +67,10 @@ export class ExpensesPageComponent implements OnInit {
 	public editExpense(expense: Expense): void {
 		this.expenseToEditSignal = signal(expense);
 		this.statePageSignal = signal('edit');
-		this.cdr.markForCheck();
+	}
+
+	public cancelForm(): void {
+		this.statePageSignal = signal('display');
 	}
 
 	public formSubmit(): void {
@@ -61,5 +80,6 @@ export class ExpensesPageComponent implements OnInit {
 
 	public onAddExpense(): void {
 		this.statePageSignal = signal('add');
+		this.cdr.markForCheck();
 	}
 }

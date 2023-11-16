@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, Signal, signal } from '@angular/core';
 import { Expense } from '../../model/expense.interface';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ExpensesService, RequestAddExpenses, RequestEditExpenses } from '../../services/expenses.service';
@@ -15,24 +15,43 @@ import { Subscription } from 'rxjs';
 
 		<!-- Form -->
 		<form [formGroup]="form" (ngSubmit)="onSubmit()">
-			<shared-select-input [formControl]="natureControl" [label]="'Nature'" [name]="'nature'" [options]="options" [required]="true"></shared-select-input><br /><br />
-			<shared-input [formControl]="amountControl" [label]="'Amount'" [type]="'number'" [name]="'amount'" [required]="true"></shared-input><br /><br />
-			<shared-textarea [formControl]="commentControl" [label]="'Comment'" [name]="'comment'" [required]="true"></shared-textarea><br /><br />
-			<shared-input [formControl]="purchasedOnControl" [label]="'PurchasedOn'" [type]="'date'" [name]="'purchasedOn'" [required]="true"></shared-input><br /><br />
+			<shared-select-input
+				[control]="natureControl"
+				[label]="'Nature'"
+				[isDisabled]="this.action === 'edit'"
+				[name]="'nature'"
+				[options]="options"
+				[isRequired]="true"
+			>
+			</shared-select-input>
+			<br /><br />
+			<shared-input [control]="amountControl" [label]="'Amount'" [type]="'number'" [name]="'amount'" [isRequired]="true"></shared-input>
+			<br /><br />
+			<shared-textarea [control]="commentControl" [label]="'Comment'" [name]="'comment'" [isRequired]="true"> </shared-textarea>
+			<br /><br />
+			<shared-input [control]="purchasedOnControl" [label]="'PurchasedOn'" [type]="'date'" [name]="'purchasedOn'" [isRequired]="true">
+			</shared-input>
+			<br /><br />
 			@if (natureValueSignal() === "trip") {
-			<shared-input [formControl]="distanceControl" [label]="'Distance'" [type]="'number'" [name]="'distance'" [required]="true"></shared-input><br /><br />
+			<shared-input [control]="distanceControl" [label]="'Distance'" [type]="'number'" [name]="'distance'" [isRequired]="true"></shared-input>
+			<br /><br />
 			} @if (natureValueSignal() === "restaurant") {
-			<shared-input [formControl]="invitesControl" [label]="'Invites'" [type]="'number'" [name]="'invites'" [required]="true"></shared-input><br /><br />
+			<shared-input [control]="invitesControl" [label]="'Invites'" [type]="'number'" [name]="'invites'" [isRequired]="true"></shared-input>
+			<br /><br />
 			}
 
-			<!-- Error message -->
-			@if (errorFormSignal()) {
-			<p>Veuillez saisir tous les champs obligatoires</p>
+			<!-- Error messages -->
+			@if (errorFormSignal() === 'invalid') {
+			<p>Formulaire invalide, veuillez saisir tous les champs obligatoires</p>
+			} @if (errorFormSignal() === 'pristine') {
+			<p>Aucune modification n'a été saisi</p>
+			} @if (errorFormSignal() === 'apiError') {
+			<p>Une erreur est survenu, veuillez réessayer plus tard</p>
 			}
 
 			<!-- Buttons -->
-			<shared-button [label]="'Cancel'" (onSubmitButton)="onCancel()"></shared-button><br />
-			<shared-button [label]="'Submit'" [type]="'submit'"></shared-button><br />
+			<shared-button [label]="'Cancel'" (submitButtonEmitter)="onCancel()"></shared-button>
+			<shared-button [label]="'Submit'" (submitButtonEmitter)="onSubmit()" [type]="'submit'"></shared-button><br />
 		</form>`,
 })
 export class ExpenseFormComponent implements OnInit, OnDestroy {
@@ -48,11 +67,11 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 
 	// Emmiter
 	@Output() public submitExpenseEmitter: EventEmitter<void> = new EventEmitter();
-	@Output() public editExpenseEmitter: EventEmitter<void> = new EventEmitter();
+	@Output() public cancelExpenseEmitter: EventEmitter<void> = new EventEmitter();
 
 	// Form
-	// Todo : typer le formulaire
-	public natureControl: FormControl = new FormControl('', Validators.required);
+	// Todo : typer le formulaire, et pourquoi pas mettre le type dans un interface.ts
+	public natureControl: FormControl = new FormControl('restaurant', Validators.required);
 	public amountControl: FormControl = new FormControl('', Validators.required);
 	public commentControl: FormControl = new FormControl('', Validators.required);
 	public purchasedOnControl: FormControl = new FormControl('', Validators.required);
@@ -70,11 +89,11 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	];
 
 	public natureValueSignal!: Signal<'trip' | 'restaurant'>;
-	public errorFormSignal: Signal<boolean> = signal(false);
+	public errorFormSignal: Signal<'invalid' | 'pristine' | 'apiError' | undefined> = signal(undefined);
 
 	private subscription: Subscription = new Subscription();
 
-	constructor(private expensesService: ExpensesService, private cdr: ChangeDetectorRef) {}
+	constructor(private expensesService: ExpensesService) {}
 
 	public ngOnInit(): void {
 		this.initForm();
@@ -82,13 +101,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 
 		this.subscription.add(
 			this.form.get('nature')?.valueChanges.subscribe((value) => {
-				this.natureValueSignal = signal(value);
-
-				if (this.form.value.nature === 'restaurant') {
-					this.form.removeControl('distance');
-					return;
-				}
-				this.form.removeControl('invites');
+				this.setSpecialControl(value);
 			}),
 		);
 	}
@@ -97,30 +110,74 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		this.subscription.unsubscribe();
 	}
 
-	public onCancel(): void {
-		this.editExpenseEmitter.emit();
+	/**
+	 * Init the form
+	 */
+	private initForm(): void {
+		if (this.action === 'edit') {
+			this.natureControl.disable();
+		}
+		this.setSpecialControl(this.expense?.nature || 'restaurant');
 	}
 
-	public onSubmit(): void {
-		if (!this.form.valid) {
-			this.errorFormSignal = signal(true);
+	/**
+	 * Set special control
+	 * add "invities" control if the nature of the expense is "restaurant"
+	 * add "distance" control if the nature of the expense is "trip"
+	 */
+	private setSpecialControl(nature: 'restaurant' | 'trip'): void {
+		if (nature === 'restaurant') {
+			this.form.removeControl('distance');
+			this.form.addControl('invites', this.invitesControl);
+			this.natureValueSignal = signal('restaurant');
+			return;
 		}
 
-		this.errorFormSignal = signal(false);
+		this.form.removeControl('invites');
+		this.form.addControl('distance', this.distanceControl);
+		this.natureValueSignal = signal('trip');
+	}
+
+	/**
+	 * On cancel, send event
+	 */
+	public onCancel(): void {
+		this.cancelExpenseEmitter.emit();
+	}
+
+	/**
+	 * On submit, verify if the form is valid and call expensesService
+	 * Used for the edition of an expense or creation of new one
+	 */
+	public onSubmit(): void {
+		if (!this.form.valid) {
+			this.errorFormSignal = signal('invalid');
+		}
+
+		if (this.form.pristine) {
+			this.errorFormSignal = signal('pristine');
+		}
+
+		this.errorFormSignal = signal(undefined);
 
 		// Edit expense
 		if (this.action === 'edit') {
 			const request = this.getEditExpenseRequest();
 
 			if (!request) {
-				this.errorFormSignal = signal(true);
+				this.errorFormSignal = signal('invalid');
 			}
 
-			// Todo : J'ai pas toute la doc mais ça serait pas mal de gérer le cas ou l'api ne répond pas où si il y a d'autres erreurs
 			this.subscription.add(
-				this.expensesService.editExpense(request as RequestEditExpenses).subscribe(() => {
-					this.submitExpenseEmitter.emit();
-				}),
+				this.expensesService.editExpense(request as RequestEditExpenses).subscribe(
+					() => {
+						this.submitExpenseEmitter.emit();
+					},
+					(error) => {
+						console.log(error);
+						this.errorFormSignal = signal('apiError');
+					},
+				),
 			);
 			return;
 		}
@@ -129,23 +186,21 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		const request = this.getAddExpenseRequest();
 
 		this.subscription.add(
-			this.expensesService.addExpense(request).subscribe(() => {
-				this.submitExpenseEmitter.emit();
-			}),
+			this.expensesService.addExpense(request).subscribe(
+				() => {
+					this.submitExpenseEmitter.emit();
+				},
+				(error) => {
+					console.log(error);
+					this.errorFormSignal = signal('apiError');
+				},
+			),
 		);
 	}
 
-	private initForm(): void {
-		if (this.expense?.nature === 'restaurant') {
-			this.form.addControl('invites', this.invitesControl);
-			this.natureValueSignal = signal('restaurant');
-			return;
-		}
-
-		this.form.addControl('distance', this.distanceControl);
-		this.natureValueSignal = signal('trip');
-	}
-
+	/**
+	 * Fill the form with the data of the expense to modify
+	 */
 	private fillForm(): void {
 		if (!this.expense) {
 			return;
@@ -162,7 +217,9 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	// Todo : Voir si c'est possible d'optimiser c'est 2 fonctions, pour le moment je suis bloqué par le typage et je n'ai pas beaucoup de temps devant moi ...
+	// Todo : Voir si c'est possible d'optimiser c'est 2 fonctions, pour le moment je suis bloqué par le typage
+	// et je n'ai pas beaucoup de temps devant moi pour y consacrer plus de temps...
+	// Ptet voir pour créer un utils.ts avec le service qui prendrait en entré un formgroup et qui renvoie la requete
 	private getEditExpenseRequest(): RequestEditExpenses | void {
 		if (!this.expense) {
 			return;

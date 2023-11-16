@@ -15,7 +15,8 @@ export class ButtonComponent {
 	@Input()
 	public type: 'button' | 'submit' = 'button';
 
-	@Output() public submitButtonEmitter: EventEmitter<void> = new EventEmitter();
+	@Output()
+	public submitButtonEmitter: EventEmitter<void> = new EventEmitter();
 
 	public onSubmitButton() {
 		this.submitButtonEmitter.emit();

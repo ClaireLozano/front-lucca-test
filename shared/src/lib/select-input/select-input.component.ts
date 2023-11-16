@@ -1,18 +1,19 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
 	selector: 'shared-select-input',
 	standalone: true,
-	imports: [CommonModule, ReactiveFormsModule, FormsModule],
+	imports: [CommonModule, ReactiveFormsModule],
 	styleUrls: ['./select-input.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `<label>
 		{{ label }}
-		@if(required) {*}
+
+		@if(isRequired) {*}
 		<br />
-		<select formControlName="name" rows="4" cols="50" [required]="required">
+		<select [formControl]="control" rows="4" cols="50" [disabled]="isDisabled" [required]="isRequired">
 			<option *ngFor="let option of options" [value]="option.value">
 				{{ option.label }}
 			</option>
@@ -30,8 +31,11 @@ export class SelectInputComponent {
 	public options!: { value: string; label: string }[];
 
 	@Input({ required: true })
-	public formControl!: FormControl;
+	public control!: FormControl;
 
 	@Input()
-	public required: boolean = false;
+	public isRequired: boolean = false;
+
+	@Input()
+	public isDisabled: boolean = false;
 }

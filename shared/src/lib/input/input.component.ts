@@ -1,18 +1,18 @@
-import { ChangeDetectionStrategy, Component, Input, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
 	selector: 'shared-input',
 	standalone: true,
-	imports: [CommonModule, ReactiveFormsModule, FormsModule],
+	imports: [CommonModule, ReactiveFormsModule],
 	styleUrls: ['./input.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `<label>
 		{{ label }}
-		@if(required) {*}
+		@if(isRequired) {*}
 		<br />
-		<input formControlName="name" [type]="type" [required]="required" />
+		<input [formControl]="control" [type]="type" [required]="isRequired" />
 	</label>`,
 })
 export class InputComponent {
@@ -26,8 +26,8 @@ export class InputComponent {
 	public label!: string;
 
 	@Input({ required: true })
-	public formControl!: FormControl;
+	public control!: FormControl;
 
 	@Input()
-	public required: boolean = false;
+	public isRequired: boolean = false;
 }
