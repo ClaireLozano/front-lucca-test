@@ -8,12 +8,22 @@ import { HttpClientModule } from '@angular/common/http';
 import { ExpensesService } from './lib/services/expenses.service';
 import { ExpensesPageResolver } from './lib/resolvers/expenses-page-resolver.service';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from '@front-lucca-test/shared';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ButtonComponent, InputComponent, SelectInputComponent, TextAreaComponent } from '@front-lucca-test/shared';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
 	declarations: [ExpensesPageComponent, ExpenseFormComponent, ExpenseDisplayComponent],
-	imports: [ExpensesPageRoutingModule, HttpClientModule, CommonModule, ButtonComponent, ReactiveFormsModule],
+	imports: [
+		ExpensesPageRoutingModule,
+		HttpClientModule,
+		CommonModule,
+		ButtonComponent,
+		TextAreaComponent,
+		SelectInputComponent,
+		InputComponent,
+		ReactiveFormsModule,
+		FormsModule,
+	],
 	providers: [ExpensesService, ExpensesPageResolver],
 })
 export class ExpensesPageModule {}

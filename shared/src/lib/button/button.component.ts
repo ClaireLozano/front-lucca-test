@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 	selector: 'shared-button',
 	standalone: true,
 	imports: [CommonModule],
-	template: ` <button [attr.type]="type" (click)="onClick()" (touche)="onClick()">{{ label }}</button> `,
+	template: ` <button [attr.type]="type" (click)="onSubmitButton()" (touche)="onSubmitButton()">{{ label }}</button> `,
 	styleUrls: ['./button.component.css'],
 })
 export class ButtonComponent {
@@ -17,7 +17,7 @@ export class ButtonComponent {
 
 	@Output() public submitButtonEmitter: EventEmitter<void> = new EventEmitter();
 
-	public onClick() {
+	public onSubmitButton() {
 		this.submitButtonEmitter.emit();
 	}
 }

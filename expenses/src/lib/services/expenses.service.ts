@@ -26,6 +26,8 @@ export interface RequestAddRestaurantExpenses {
 	invites: number;
 }
 
+export type RequestAddExpenses = RequestAddTripExpenses | RequestAddRestaurantExpenses;
+
 export interface RequestEditTripExpenses {
 	id: number;
 	amount: string;
@@ -43,6 +45,8 @@ export interface RequestEditRestaurantExpenses {
 	nature: 'restaurant';
 	invites: number;
 }
+
+export type RequestEditExpenses = RequestEditTripExpenses | RequestEditRestaurantExpenses;
 
 @Injectable()
 export class ExpensesService {

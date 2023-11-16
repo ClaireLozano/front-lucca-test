@@ -6,11 +6,10 @@ import { Expense } from '../../model/expense.interface';
 	styleUrls: ['./expense-display.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
-		<div *ngIf="this.expense">
+		<div *ngIf="this.expense" (click)="editExpense()">
 			@for (attribute of expenseToDisplaySignal(); track $index) {
 			<p>{{ attribute.key }}: {{ attribute.value }}</p>
 			}
-			<shared-button [label]="'Edit'" (onClickEmitter)="editExpense()"></shared-button>
 		</div>
 	`,
 })
