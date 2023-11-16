@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, Signal, signal } from '@angular/core';
-import { Expense } from '../../model/expense.interface';
+import { Expense } from '../../services/models/expense.interface';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ExpensesService, RequestAddExpenses, RequestEditExpenses } from '../../services/expenses.service';
+import { ExpensesService } from '../../services/expenses.service';
 import { Subscription } from 'rxjs';
+import { RequestAddExpenses, RequestEditExpenses } from '../../services/models/requests.interface';
 
 // Todo : commenter les fonctions pour dire à quoi elles servent, se qu'elles prennent en entré et en sortie
 // Todo : creer un fichier de constante pour y mettre tous les types de form control et les options du select

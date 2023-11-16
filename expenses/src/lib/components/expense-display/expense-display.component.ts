@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, Signal, signal } from '@angular/core';
-import { Expense } from '../../model/expense.interface';
+import { Expense } from '../../services/models/expense.interface';
 
 @Component({
 	selector: 'exp-expense-display',

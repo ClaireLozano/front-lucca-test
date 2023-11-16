@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Signal, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Expense } from '../../model/expense.interface';
+import { Expense } from '../../services/models/expense.interface';
 
 @Component({
 	selector: 'exp-expenses-page',
