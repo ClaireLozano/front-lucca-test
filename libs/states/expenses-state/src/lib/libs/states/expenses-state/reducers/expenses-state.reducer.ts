@@ -2,36 +2,54 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 
 import * as ExpensesStateActions from '../actions/expenses-state.actions';
-import { ExpensesStateEntity } from '../expenses-state.models';
-
+import { Expense } from '../models/expense/expense.interface';
 export const EXPENSES_STATE_FEATURE_KEY = 'expensesState';
 
-export interface ExpensesStateState extends EntityState<ExpensesStateEntity> {
-	selectedId?: string | number; // which ExpensesState record has been selected
-	loaded: boolean; // has the ExpensesState list been loaded
-	error?: string | null; // last known error (if any)
+export const CallStatus = {
+	empty: 'empty',
+	loading: 'loading',
+	success: 'success',
+	error: 'error',
+};
+
+export interface ExpensesState extends EntityState<Expense> {
+	expenses: Expense[];
+	numberExpenses: number | undefined;
+	callStatus: string;
 }
 
 export interface ExpensesStatePartialState {
-	readonly [EXPENSES_STATE_FEATURE_KEY]: ExpensesStateState;
+	readonly [EXPENSES_STATE_FEATURE_KEY]: ExpensesState;
 }
 
-export const expensesStateAdapter: EntityAdapter<ExpensesStateEntity> = createEntityAdapter<ExpensesStateEntity>();
+export const expensesState: EntityAdapter<Expense> = createEntityAdapter<Expense>();
 
-export const initialExpensesStateState: ExpensesStateState = expensesStateAdapter.getInitialState({
-	// set initial required properties
-	loaded: false,
+export const initialExpensesStateState: ExpensesState = expensesState.getInitialState({
+	expenses: [],
+	numberExpenses: undefined,
+	callStatus: CallStatus.empty,
 });
 
 const reducer = createReducer(
 	initialExpensesStateState,
-	on(ExpensesStateActions.initExpensesState, (state) => ({ ...state, loaded: false, error: null })),
-	on(ExpensesStateActions.loadExpensesStateSuccess, (state, { expensesState }) =>
-		expensesStateAdapter.setAll(expensesState, { ...state, loaded: true }),
-	),
-	on(ExpensesStateActions.loadExpensesStateFailure, (state, { error }) => ({ ...state, error })),
+	on(ExpensesStateActions.initExpensesState, (state) => ({
+		...state,
+		callStatus: CallStatus.loading,
+	})),
+	on(ExpensesStateActions.loadExpensesStateSuccess, (state, { expenses, numberExpenses }) => ({
+		...state,
+		expenses: expenses,
+		numberExpenses: numberExpenses,
+		callStatus: CallStatus.success,
+	})),
+	on(ExpensesStateActions.loadExpensesStateFailure, (state) => ({
+		...state,
+		expenses: [],
+		numberExpenses: undefined,
+		callStatus: CallStatus.error,
+	})),
 );
 
-export function expensesStateReducer(state: ExpensesStateState | undefined, action: Action) {
+export function expensesStateReducer(state: ExpensesState | undefined, action: Action) {
 	return reducer(state, action);
 }

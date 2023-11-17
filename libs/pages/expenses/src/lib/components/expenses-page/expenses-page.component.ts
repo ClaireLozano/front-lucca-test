@@ -1,12 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Signal, signal } from '@angular/core';
-import { Expense } from '../../services/models/expense/expense.interface';
 import { Observable } from 'rxjs';
+import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-state';
 
-// Todo : faire plutot 3 vrai page avec navigation SPA
-// Si on edit pas ou modifie pas, on met pas a jour le state
-
+// Todo : Si on edit pas ou modifie pas, on met pas a jour le state
 // Todo : faire un affichage un peu plus sympa pour l'affichage des différentes dépenses
-
 // Todo : les TU
 @Component({
 	selector: 'exp-expenses-page',
@@ -59,15 +56,15 @@ import { Observable } from 'rxjs';
 })
 export class ExpensesPageComponent {
 	// Get data from resolver
-	@Select(ExpensesState.getExpenses) expenses$!: Observable<Expense[]>;
-	@Select(ExpensesState.getNumberExpenses) countExpenses$!: Observable<number>;
+	public expenses$: Observable<Expense[]> = this.expensesFacade.expenses$;
+	public countExpenses$: Observable<number | undefined> = this.expensesFacade.number$;
 
 	// State of page view
 	public statePageSignal: Signal<'display' | 'edit' | 'add'> = signal('display');
 
 	public expenseToEditSignal!: Signal<Expense>;
 
-	constructor(private cdr: ChangeDetectorRef, private store: Store) {}
+	constructor(private cdr: ChangeDetectorRef, private expensesFacade: ExpensesStateFacade) {}
 
 	/**
 	 * Display edit expense view
@@ -88,7 +85,7 @@ export class ExpensesPageComponent {
 	 * On form submit
 	 */
 	public formSubmit(): void {
-		this.store.dispatch(new GetExpensesAction({ page: 2, limit: 5 }));
+		this.expensesFacade.init();
 
 		this.statePageSignal = signal('display');
 		alert('Votre dépense à bien été saisie !');

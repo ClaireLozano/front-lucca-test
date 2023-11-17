@@ -1,11 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { ExpensesStateEntity } from '../expenses-state.models';
+import { Expense } from '../models/expense/expense.interface';
 
 export const initExpensesState = createAction('[ExpensesState Page] Init');
-
 export const loadExpensesStateSuccess = createAction(
 	'[ExpensesState/API] Load ExpensesState Success',
-	props<{ expensesState: ExpensesStateEntity[] }>(),
+	props<{ expenses: Expense[]; numberExpenses: number }>(),
 );
-
-export const loadExpensesStateFailure = createAction('[ExpensesState/API] Load ExpensesState Failure', props<{ error: any }>());
+export const loadExpensesStateFailure = createAction('[ExpensesState/API] Load ExpensesState Failure');

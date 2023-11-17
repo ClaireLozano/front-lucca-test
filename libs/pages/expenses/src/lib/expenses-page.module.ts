@@ -6,9 +6,11 @@ import { ButtonComponent, InputComponent, SelectInputComponent, TextAreaComponen
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExpenseDisplayComponent } from './components/expense-display/expense-display.component';
 import { ExpenseFormComponent } from './components/expense-form/expense-form.component';
-import { ExpensesPageComponent } from './components/expenses-page/expenses-page.component';
 import { ExpensesPageRoutingModule } from './expenses-page.routes.module';
 import { ExpensesResolver } from './resolvers/expenses-resolver.service';
+import { expensesStateReducer } from '@front-lucca-test/states/expenses-state';
+import { StoreModule } from '@ngrx/store';
+import { ExpensesPageComponent } from './components/expenses-page/expenses-page.component';
 
 @NgModule({
 	declarations: [ExpensesPageComponent, ExpenseFormComponent, ExpenseDisplayComponent],
@@ -21,7 +23,8 @@ import { ExpensesResolver } from './resolvers/expenses-resolver.service';
 		SelectInputComponent,
 		InputComponent,
 		ReactiveFormsModule,
+		StoreModule.forFeature('expensesState', expensesStateReducer),
 	],
-	providers: [ExpensesService, ExpensesResolver],
+	providers: [ExpensesResolver],
 })
 export class ExpensesPageModule {}

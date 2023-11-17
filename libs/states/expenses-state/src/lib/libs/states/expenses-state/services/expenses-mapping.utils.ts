@@ -1,6 +1,6 @@
 import { FormGroup } from '@angular/forms';
-import { RequestEditExpenses } from './models/edit-expense/edit-expense-request.interface';
-import { RequestAddExpenses } from './models/add-expense/add-expense-request.interface';
+import { RequestEditExpenses } from '../models/edit-expense/edit-expense-request.interface';
+import { RequestAddExpenses } from '../models/add-expense/add-expense-request.interface';
 
 /**
  * Return the RequestEditExpenses from a given form group

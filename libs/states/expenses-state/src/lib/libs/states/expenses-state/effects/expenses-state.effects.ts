@@ -1,21 +1,29 @@
 import { Injectable, inject } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { switchMap, catchError, of } from 'rxjs';
+import { catchError, of, mergeMap, map } from 'rxjs';
 import * as ExpensesStateActions from '../actions/expenses-state.actions';
-import * as ExpensesStateFeature from '../reducers/expenses-state.reducer';
+import { ExpensesService } from '../services/expenses.service';
+import { ResponseGetExpenses } from '../models/get-expenses/get-expenses-response.interface';
 
 @Injectable()
 export class ExpensesStateEffects {
 	private actions$ = inject(Actions);
 
+	constructor(private expensesService: ExpensesService) {}
+
 	init$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(ExpensesStateActions.initExpensesState),
-			switchMap(() => of(ExpensesStateActions.loadExpensesStateSuccess({ expensesState: [] }))),
-			catchError((error) => {
-				console.error('Error', error);
-				return of(ExpensesStateActions.loadExpensesStateFailure({ error }));
-			}),
+			mergeMap(() =>
+				this.expensesService.getExpenses({ page: 5, limit: 10 }).pipe(
+					map((result: ResponseGetExpenses) => {
+						return ExpensesStateActions.loadExpensesStateSuccess({ expenses: result.items, numberExpenses: result.count });
+					}),
+					catchError(() => {
+						return of(ExpensesStateActions.loadExpensesStateFailure());
+					}),
+				),
+			),
 		),
 	);
 }
