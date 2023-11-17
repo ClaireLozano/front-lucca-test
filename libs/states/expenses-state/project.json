@@ -1,0 +1,24 @@
+{
+	"name": "states-expenses-state",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/states/expenses-state/src",
+	"prefix": "front-lucca-test",
+	"tags": [],
+	"projectType": "library",
+	"targets": {
+		"test": {
+			"executor": "@nx/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "libs/states/expenses-state/jest.config.ts"
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:lint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/states/expenses-state/**/*.ts", "libs/states/expenses-state/**/*.html"]
+			}
+		}
+	}
+}

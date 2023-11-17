@@ -1,0 +1,65 @@
+{
+	"name": "storybook-nova",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/storybook/nova/src",
+	"prefix": "front-lucca-test",
+	"tags": [],
+	"projectType": "library",
+	"targets": {
+		"test": {
+			"executor": "@nx/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "libs/storybook/nova/jest.config.ts"
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:lint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/storybook/nova/**/*.ts", "libs/storybook/nova/**/*.html"]
+			}
+		},
+		"storybook": {
+			"executor": "@storybook/angular:start-storybook",
+			"options": {
+				"port": 4400,
+				"configDir": "libs/storybook/nova/.storybook",
+				"browserTarget": "storybook-nova:build-storybook",
+				"compodoc": false
+			},
+			"configurations": {
+				"ci": {
+					"quiet": true
+				}
+			}
+		},
+		"build-storybook": {
+			"executor": "@storybook/angular:build-storybook",
+			"outputs": ["{options.outputDir}"],
+			"options": {
+				"outputDir": "dist/storybook/storybook-nova",
+				"configDir": "libs/storybook/nova/.storybook",
+				"browserTarget": "storybook-nova:build-storybook",
+				"compodoc": false
+			},
+			"configurations": {
+				"ci": {
+					"quiet": true
+				}
+			}
+		},
+		"static-storybook": {
+			"executor": "@nx/web:file-server",
+			"options": {
+				"buildTarget": "storybook-nova:build-storybook",
+				"staticFilePath": "dist/storybook/storybook-nova"
+			},
+			"configurations": {
+				"ci": {
+					"buildTarget": "storybook-nova:build-storybook:ci"
+				}
+			}
+		}
+	}
+}
