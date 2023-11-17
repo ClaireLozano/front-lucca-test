@@ -12,10 +12,12 @@ export class ExpensesPageResolver implements Resolve<Observable<ExpenseStateMode
 	public resolve() {
 		this.store.dispatch(new GetExpensesAction({ page: 2, limit: 5 }));
 
-		return this.store.dispatch(new GetExpensesAction({ page: 2, limit: 5 })).pipe(
-			filter((state) => state.items.length > 0), // Filtrer jusqu'à ce que les données soient disponibles
-			take(1), // Prendre seulement une fois
-			tap((state) => console.log('Dépenses récupérées:', state)),
-		);
+		return this.store
+			.select((state) => state.expenses)
+			.pipe(
+				filter((state) => state.items.length > 0), // Filtrer jusqu'à ce que les données soient disponibles
+				take(1), // Prendre seulement une fois
+				tap((state) => console.log('Dépenses récupérées:', state)),
+			);
 	}
 }

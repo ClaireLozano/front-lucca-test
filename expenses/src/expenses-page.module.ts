@@ -12,6 +12,7 @@ import { ButtonComponent, InputComponent, SelectInputComponent, TextAreaComponen
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { ExpensesState } from './lib/states/expenses.state';
 import { GetExpensesAction } from './lib/states/expenses.action';
 
 @NgModule({
@@ -25,7 +26,7 @@ import { GetExpensesAction } from './lib/states/expenses.action';
 		SelectInputComponent,
 		InputComponent,
 		ReactiveFormsModule,
-		NgxsModule.forRoot([GetExpensesAction]),
+		NgxsModule.forRoot([ExpensesState, GetExpensesAction]),
 		NgxsReduxDevtoolsPluginModule.forRoot(),
 	],
 	providers: [ExpensesService, ExpensesPageResolver],

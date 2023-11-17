@@ -1,4 +1,7 @@
+import { Inject, Injectable } from '@angular/core';
+
+@Injectable()
 export class GetExpensesAction {
 	static readonly type = '[Expenses] Get Expenses';
-	constructor(public sort: { page: number; limit: number }) {}
+	constructor(@Inject('sortToken') public sort: { page: number; limit: number }) {}
 }
