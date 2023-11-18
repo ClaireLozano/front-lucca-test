@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, Signal, signal } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Expense, ExpensesStateFacade, getEditExpenseRequest, getAddExpenseRequest } from '@front-lucca-test/states/expenses-state';
 import { Subscription } from 'rxjs';
-import { getEditExpenseRequest, getAddExpenseRequest, Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-state';
 
 // Todo : creer un fichier de constante pour y mettre tous les types de form control et les options du select
 @Component({

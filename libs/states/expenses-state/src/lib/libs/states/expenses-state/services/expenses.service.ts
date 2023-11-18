@@ -2,12 +2,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Expense } from '../models/expense/expense.interface';
-
 import { RequestAddTripExpense, RequestAddRestaurantExpense } from '../models/add-expense/add-expense-request.interface';
 import { RequestEditTripExpense, RequestEditRestaurantExpense } from '../models/edit-expense/edit-expense-request.interface';
 import { ResponseGetExpenses } from '../models/get-expenses/get-expenses-response.interface';
 
-// Todo : à mettre ailleurs
+// Todo
 const environment = {
 	expenseApiUrl: 'http://localhost:3000',
 };

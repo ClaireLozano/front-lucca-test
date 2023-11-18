@@ -2,9 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { Route } from '@angular/router';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { ExpensesStateEffects, expensesStateReducer } from '@front-lucca-test/states/expenses-state';
 
 export const appRoutes: Route[] = [
 	{ path: '', redirectTo: 'expenses' },
@@ -16,11 +13,6 @@ export const appRoutes: Route[] = [
 
 @NgModule({
 	exports: [RouterModule],
-	imports: [
-		RouterModule.forRoot(appRoutes),
-		StoreModule.forRoot({}),
-		EffectsModule.forRoot([ExpensesStateEffects]),
-		StoreModule.forFeature('expensesState', expensesStateReducer),
-	],
+	imports: [RouterModule.forRoot(appRoutes)],
 })
 export class AppRoutingModule {}
