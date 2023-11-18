@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Expense } from '../models/expense/expense.interface';
 
-import { RequestAddTripExpenses, RequestAddRestaurantExpenses } from '../models/add-expense/add-expense-request.interface';
-import { RequestEditTripExpenses, RequestEditRestaurantExpenses } from '../models/edit-expense/edit-expense-request.interface';
+import { RequestAddTripExpense, RequestAddRestaurantExpense } from '../models/add-expense/add-expense-request.interface';
+import { RequestEditTripExpense, RequestEditRestaurantExpense } from '../models/edit-expense/edit-expense-request.interface';
 import { ResponseGetExpenses } from '../models/get-expenses/get-expenses-response.interface';
 
+// Todo : à mettre ailleurs
 const environment = {
 	expenseApiUrl: 'http://localhost:3000',
 };
@@ -36,14 +37,14 @@ export class ExpensesService {
 	/**
 	 * Add an expense
 	 */
-	public addExpense(expense: RequestAddTripExpenses | RequestAddRestaurantExpenses): Observable<unknown> {
+	public addExpense(expense: RequestAddTripExpense | RequestAddRestaurantExpense): Observable<unknown> {
 		return this.http.post<Expense>(`${environment.expenseApiUrl}/expenses/`, expense);
 	}
 
 	/**
 	 * Edit an expense
 	 */
-	public editExpense(expense: RequestEditTripExpenses | RequestEditRestaurantExpenses): Observable<unknown> {
+	public editExpense(expense: RequestEditTripExpense | RequestEditRestaurantExpense): Observable<unknown> {
 		return this.http.put<Expense>(`${environment.expenseApiUrl}/expenses/${expense.id}`, expense);
 	}
 }

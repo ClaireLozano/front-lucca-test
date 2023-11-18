@@ -6,7 +6,6 @@ import { Expense } from '../models/expense/expense.interface';
 export const EXPENSES_STATE_FEATURE_KEY = 'expensesState';
 
 export const CallStatus = {
-	empty: 'empty',
 	loading: 'loading',
 	success: 'success',
 	error: 'error',
@@ -15,7 +14,9 @@ export const CallStatus = {
 export interface ExpensesState extends EntityState<Expense> {
 	expenses: Expense[];
 	numberExpenses: number | undefined;
-	callStatus: string;
+	getExpensesStatus: string | undefined;
+	addExpenseStatus: string | undefined;
+	editExpenseStatus: string | undefined;
 }
 
 export interface ExpensesStatePartialState {
@@ -24,29 +25,60 @@ export interface ExpensesStatePartialState {
 
 export const expensesState: EntityAdapter<Expense> = createEntityAdapter<Expense>();
 
-export const initialExpensesStateState: ExpensesState = expensesState.getInitialState({
+export const initialExpensesState: ExpensesState = expensesState.getInitialState({
 	expenses: [],
 	numberExpenses: undefined,
-	callStatus: CallStatus.empty,
+	getExpensesStatus: undefined,
+	addExpenseStatus: undefined,
+	editExpenseStatus: undefined,
 });
 
 const reducer = createReducer(
-	initialExpensesStateState,
+	initialExpensesState,
+	// Get expenses reducer
 	on(ExpensesStateActions.initExpensesState, (state) => ({
 		...state,
-		callStatus: CallStatus.loading,
+		getExpensesStatus: CallStatus.loading,
 	})),
 	on(ExpensesStateActions.loadExpensesStateSuccess, (state, { expenses, numberExpenses }) => ({
 		...state,
 		expenses: expenses,
 		numberExpenses: numberExpenses,
-		callStatus: CallStatus.success,
+		getExpensesStatus: CallStatus.success,
 	})),
 	on(ExpensesStateActions.loadExpensesStateFailure, (state) => ({
 		...state,
 		expenses: [],
 		numberExpenses: undefined,
-		callStatus: CallStatus.error,
+		getExpensesStatus: CallStatus.error,
+	})),
+
+	// Add expense reducer
+	on(ExpensesStateActions.addExpenseState, (state) => ({
+		...state,
+		addExpenseStatus: CallStatus.loading,
+	})),
+	on(ExpensesStateActions.addExpenseStateSuccess, (state) => ({
+		...state,
+		addExpenseStatus: CallStatus.success,
+	})),
+	on(ExpensesStateActions.addExpenseStateFailure, (state) => ({
+		...state,
+		addExpenseStatus: CallStatus.error,
+	})),
+
+	// Edit expense reducer
+	on(ExpensesStateActions.editExpenseState, (state) => ({
+		...state,
+		editExpenseStatus: CallStatus.loading,
+	})),
+	on(ExpensesStateActions.editExpenseStateSuccess, (state) => ({
+		...state,
+		editExpenseStatus: CallStatus.success,
+	})),
+	on(ExpensesStateActions.editExpenseStateFailure, (state) => ({
+		...state,
+		editExpenseStatus: CallStatus.error,
 	})),
 );
 

@@ -1,8 +1,11 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { EXPENSES_STATE_FEATURE_KEY, ExpensesState } from '../reducers/expenses-state.reducer';
 
-export const selectExpensesStateState = createFeatureSelector<ExpensesState>(EXPENSES_STATE_FEATURE_KEY);
+export const selectExpensesState = createFeatureSelector<ExpensesState>(EXPENSES_STATE_FEATURE_KEY);
 
-export const selectExpenses = createSelector(selectExpensesStateState, (state: ExpensesState) => state.expenses);
-export const selectNumber = createSelector(selectExpensesStateState, (state: ExpensesState) => state.numberExpenses);
-export const selectCallStatus = createSelector(selectExpensesStateState, (state: ExpensesState) => state.callStatus);
+export const selectExpenses = createSelector(selectExpensesState, (state: ExpensesState) => state.expenses);
+export const selectNumber = createSelector(selectExpensesState, (state: ExpensesState) => state.numberExpenses);
+
+export const selectGetExpensesStatus = createSelector(selectExpensesState, (state: ExpensesState) => state.getExpensesStatus);
+export const selectAddExpenseStatus = createSelector(selectExpensesState, (state: ExpensesState) => state.addExpenseStatus);
+export const selectEditExpenseStatus = createSelector(selectExpensesState, (state: ExpensesState) => state.editExpenseStatus);

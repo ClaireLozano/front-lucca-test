@@ -1,10 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, Signal, signal } from '@angular/core';
-import { Expense } from '../../services/models/expense/expense.interface';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ExpensesService } from '../../services/expenses.service';
 import { Subscription } from 'rxjs';
-import { RequestEditExpenses } from '../../services/models/edit-expense/edit-expense-request.interface';
-import { getEditExpenseRequest, getAddExpenseRequest } from '../../services/expenses-mapping.utils';
+import { getEditExpenseRequest, getAddExpenseRequest, Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-state';
 
 // Todo : creer un fichier de constante pour y mettre tous les types de form control et les options du select
 @Component({
@@ -91,9 +88,11 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	public natureValueSignal!: Signal<'trip' | 'restaurant'>;
 	public errorFormSignal: Signal<'invalid' | 'pristine' | 'apiError' | undefined> = signal(undefined);
 
+	// Todo : gérérer les erreurs apiError avec des signals ?
+
 	private subscription: Subscription = new Subscription();
 
-	constructor(private expensesService: ExpensesService) {}
+	constructor(private expensesFacade: ExpensesStateFacade) {}
 
 	public ngOnInit(): void {
 		this.initForm();
@@ -170,35 +169,14 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 			}
 
 			const request = getEditExpenseRequest(this.expense.id, this.form);
+			this.expensesFacade.editExpense(request);
 
-			this.subscription.add(
-				this.expensesService.editExpense(request as RequestEditExpenses).subscribe(
-					() => {
-						this.submitExpenseEmitter.emit();
-					},
-					(error) => {
-						console.log(error);
-						this.errorFormSignal = signal('apiError');
-					},
-				),
-			);
 			return;
 		}
 
 		// Add new expense
 		const request = getAddExpenseRequest(this.form);
-
-		this.subscription.add(
-			this.expensesService.addExpense(request).subscribe(
-				() => {
-					this.submitExpenseEmitter.emit();
-				},
-				(error) => {
-					console.log(error);
-					this.errorFormSignal = signal('apiError');
-				},
-			),
-		);
+		this.expensesFacade.addExpense(request);
 	}
 
 	/**

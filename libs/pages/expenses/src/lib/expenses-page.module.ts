@@ -8,9 +8,10 @@ import { ExpenseDisplayComponent } from './components/expense-display/expense-di
 import { ExpenseFormComponent } from './components/expense-form/expense-form.component';
 import { ExpensesPageRoutingModule } from './expenses-page.routes.module';
 import { ExpensesResolver } from './resolvers/expenses-resolver.service';
-import { expensesStateReducer } from '@front-lucca-test/states/expenses-state';
+import { ExpensesStateEffects, expensesStateReducer } from '@front-lucca-test/states/expenses-state';
 import { StoreModule } from '@ngrx/store';
 import { ExpensesPageComponent } from './components/expenses-page/expenses-page.component';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
 	declarations: [ExpensesPageComponent, ExpenseFormComponent, ExpenseDisplayComponent],
@@ -24,6 +25,7 @@ import { ExpensesPageComponent } from './components/expenses-page/expenses-page.
 		InputComponent,
 		ReactiveFormsModule,
 		StoreModule.forFeature('expensesState', expensesStateReducer),
+		EffectsModule.forRoot([ExpensesStateEffects]),
 	],
 	providers: [ExpensesResolver],
 })

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, Signal, signal } from '@angular/core';
-import { Expense } from '../../services/models/expense/expense.interface';
+import { Expense } from '@front-lucca-test/states/expenses-state';
 
 @Component({
 	selector: 'exp-expense-display',

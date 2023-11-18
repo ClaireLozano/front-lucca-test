@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Signal, signal }
 import { Observable } from 'rxjs';
 import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-state';
 
-// Todo : Si on edit pas ou modifie pas, on met pas a jour le state
 // Todo : faire un affichage un peu plus sympa pour l'affichage des différentes dépenses
 // Todo : les TU
 @Component({

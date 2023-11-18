@@ -4,9 +4,10 @@ import { EffectsModule } from '@ngrx/effects';
 import * as fromExpensesState from './libs/states/expenses-state/reducers/expenses-state.reducer';
 import { ExpensesStateEffects } from './libs/states/expenses-state/effects/expenses-state.effects';
 import { ExpensesStateFacade } from './libs/states/expenses-state/facades/expenses-state.facade';
+import { ExpensesService } from './libs/states/expenses-state/services/expenses.service';
 
 @NgModule({
-	providers: [ExpensesStateFacade],
+	providers: [ExpensesStateFacade, ExpensesService],
 	imports: [
 		StoreModule.forFeature(fromExpensesState.EXPENSES_STATE_FEATURE_KEY, fromExpensesState.expensesStateReducer),
 		EffectsModule.forFeature([ExpensesStateEffects]),

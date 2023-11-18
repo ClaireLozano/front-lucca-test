@@ -1,4 +1,4 @@
-export interface RequestAddTripExpenses {
+export interface RequestAddTripExpense {
 	amount: number;
 	comment: string;
 	purchasedOn: string;
@@ -6,7 +6,7 @@ export interface RequestAddTripExpenses {
 	distance: number;
 }
 
-export interface RequestAddRestaurantExpenses {
+export interface RequestAddRestaurantExpense {
 	amount: number;
 	comment: string;
 	purchasedOn: string;
@@ -14,4 +14,4 @@ export interface RequestAddRestaurantExpenses {
 	invites: number;
 }
 
-export type RequestAddExpenses = RequestAddTripExpenses | RequestAddRestaurantExpenses;
+export type RequestAddExpense = RequestAddTripExpense | RequestAddRestaurantExpense;

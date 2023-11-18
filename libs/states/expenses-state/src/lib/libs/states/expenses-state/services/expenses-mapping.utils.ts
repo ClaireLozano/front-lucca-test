@@ -1,11 +1,11 @@
 import { FormGroup } from '@angular/forms';
-import { RequestEditExpenses } from '../models/edit-expense/edit-expense-request.interface';
-import { RequestAddExpenses } from '../models/add-expense/add-expense-request.interface';
+import { RequestEditExpense } from '../models/edit-expense/edit-expense-request.interface';
+import { RequestAddExpense } from '../models/add-expense/add-expense-request.interface';
 
 /**
- * Return the RequestEditExpenses from a given form group
+ * Return the RequestEditExpense from a given form group
  */
-export function getEditExpenseRequest(expenseId: number, form: FormGroup): RequestEditExpenses {
+export function getEditExpenseRequest(expenseId: number, form: FormGroup): RequestEditExpense {
 	if (form.value.nature === 'restaurant') {
 		return {
 			id: expenseId,
@@ -28,9 +28,9 @@ export function getEditExpenseRequest(expenseId: number, form: FormGroup): Reque
 }
 
 /**
- * Return the RequestAddExpenses from a given form group
+ * Return the RequestAddExpense from a given form group
  */
-export function getAddExpenseRequest(form: FormGroup): RequestAddExpenses {
+export function getAddExpenseRequest(form: FormGroup): RequestAddExpense {
 	if (form.value.nature === 'restaurant') {
 		return {
 			amount: parseFloat(form.value.amount),
