@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
@@ -6,7 +6,6 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 	selector: 'nova-select-input',
 	standalone: true,
 	imports: [CommonModule, ReactiveFormsModule],
-	changeDetection: ChangeDetectionStrategy.OnPush,
 	styles: [
 		`
 			.error-input {

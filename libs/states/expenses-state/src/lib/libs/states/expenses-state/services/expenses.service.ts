@@ -37,7 +37,7 @@ export class ExpensesService {
 	 * Add an expense
 	 */
 	public addExpense(expense: RequestAddTripExpense | RequestAddRestaurantExpense): Observable<unknown> {
-		return this.http.post<Expense>(`${environment.expenseApiUrl}/expenses/`, expense);
+		return this.http.post<Expense>(`${environment.expenseApiUrl}/expenses`, expense);
 	}
 
 	/**

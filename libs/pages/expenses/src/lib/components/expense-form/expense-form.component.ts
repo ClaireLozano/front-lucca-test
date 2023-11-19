@@ -1,4 +1,16 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, Signal, signal } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	OnDestroy,
+	OnInit,
+	Output,
+	Signal,
+	effect,
+	signal,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Expense, ExpensesStateFacade, getEditExpenseRequest, getAddExpenseRequest } from '@front-lucca-test/states/expenses-state';
 import { Subscription } from 'rxjs';
@@ -22,7 +34,13 @@ import { Subscription } from 'rxjs';
 			>
 			</nova-select-input>
 			<br /><br />
-			<nova-input [control]="amountControl" [label]="'Amount'" [type]="'number'" [name]="'amount'" [isRequired]="true"></nova-input>
+			<nova-input
+				[control]="amountControl"
+				[label]="'Amount (doit être superieur à zéro)'"
+				[type]="'number'"
+				[name]="'amount'"
+				[isRequired]="true"
+			></nova-input>
 			<br /><br />
 			<nova-textarea [control]="commentControl" [label]="'Comment'" [name]="'comment'" [isRequired]="true"> </nova-textarea>
 			<br /><br />
@@ -48,7 +66,7 @@ import { Subscription } from 'rxjs';
 
 			<!-- Buttons -->
 			<nova-button [label]="'Cancel'" (submitButtonEmitter)="onCancel()"></nova-button>
-			<nova-button [label]="'Submit'" (submitButtonEmitter)="onSubmit()" [type]="'submit'"></nova-button><br />
+			<nova-button [label]="'Submit'" [type]="'submit'"></nova-button><br />
 		</form>`,
 })
 export class ExpenseFormComponent implements OnInit, OnDestroy {
@@ -67,8 +85,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	// Form
 	// Todo : typer le formulaire, et pourquoi pas mettre le type dans un interface.ts
 	public natureControl: FormControl = new FormControl('restaurant', Validators.required);
-	// Todo : montant non null
-	public amountControl: FormControl = new FormControl(0, Validators.required);
+	public amountControl: FormControl = new FormControl('', [Validators.required, Validators.min(0.01)]);
 	public commentControl: FormControl = new FormControl('', Validators.required);
 	public purchasedOnControl: FormControl = new FormControl('', Validators.required);
 	public form: FormGroup = new FormGroup({
@@ -78,8 +95,8 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		purchasedOn: this.purchasedOnControl,
 	});
 	// Todo : voir pour rajouter des règles de gestion dans les inputs, un input de type number autorise certains char comme "E"
-	public distanceControl: FormControl = new FormControl(0, Validators.required);
-	public invitesControl: FormControl = new FormControl(0, Validators.required);
+	public distanceControl: FormControl = new FormControl('', [Validators.required, Validators.min(0)]);
+	public invitesControl: FormControl = new FormControl('', Validators.required);
 	public options: { value: string; label: string }[] = [
 		{ value: 'restaurant', label: 'Restaurant' },
 		{ value: 'trip', label: 'Trip' },
@@ -88,11 +105,21 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	public natureValueSignal!: Signal<'trip' | 'restaurant'>;
 	public errorFormSignal: Signal<'invalid' | 'pristine' | 'apiError' | undefined> = signal(undefined);
 
-	// Todo : gérérer les erreurs apiError avec des signals ?
-
 	private subscription: Subscription = new Subscription();
 
-	constructor(private expensesFacade: ExpensesStateFacade) {}
+	constructor(private cdr: ChangeDetectorRef, private expensesFacade: ExpensesStateFacade) {
+		this.expensesFacade.initAddExpense();
+		this.expensesFacade.initEditExpense();
+
+		effect(() => {
+			if (this.expensesFacade.editExpenseStatusSignal() === 'error' || this.expensesFacade.addExpenseStatusSignal() === 'error') {
+				this.errorFormSignal = signal('apiError');
+			}
+			if (this.expensesFacade.editExpenseStatusSignal() === 'success' || this.expensesFacade.addExpenseStatusSignal() === 'success') {
+				this.submitExpenseEmitter.emit();
+			}
+		});
+	}
 
 	public ngOnInit(): void {
 		this.initForm();
@@ -150,6 +177,8 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	 */
 	public onSubmit(): void {
 		this.errorFormSignal = signal(undefined);
+		this.form.markAllAsTouched();
+		this.cdr.detectChanges;
 
 		if (!this.form.valid) {
 			this.errorFormSignal = signal('invalid');

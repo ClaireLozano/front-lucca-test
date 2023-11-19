@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
 	selector: 'nova-button',
 	standalone: true,
 	imports: [CommonModule],
-	template: ` <button [attr.type]="type" (click)="onSubmitButton()" (touche)="onSubmitButton()">{{ label }}</button> `,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	template: ` <button [attr.type]="type" (click)="onSubmitButton()">{{ label }}</button> `,
 })
 export class ButtonComponent {
 	@Input({ required: true })

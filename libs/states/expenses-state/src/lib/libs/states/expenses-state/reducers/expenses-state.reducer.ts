@@ -54,6 +54,10 @@ const reducer = createReducer(
 	})),
 
 	// Add expense reducer
+	on(ExpensesStateActions.initAddExpenseState, (state) => ({
+		...state,
+		addExpenseStatus: undefined,
+	})),
 	on(ExpensesStateActions.addExpenseState, (state) => ({
 		...state,
 		addExpenseStatus: CallStatus.loading,
@@ -68,6 +72,10 @@ const reducer = createReducer(
 	})),
 
 	// Edit expense reducer
+	on(ExpensesStateActions.initEditExpenseState, (state) => ({
+		...state,
+		editExpenseStatus: undefined,
+	})),
 	on(ExpensesStateActions.editExpenseState, (state) => ({
 		...state,
 		editExpenseStatus: CallStatus.loading,

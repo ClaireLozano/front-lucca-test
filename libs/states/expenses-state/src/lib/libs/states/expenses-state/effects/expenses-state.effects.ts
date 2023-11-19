@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { catchError, of, mergeMap, map } from 'rxjs';
+import { catchError, of, map, switchMap, filter } from 'rxjs';
 import * as ExpensesStateActions from '../actions/expenses-state.actions';
 import { ExpensesService } from '../services/expenses.service';
 import { ResponseGetExpenses } from '../models/get-expenses/get-expenses-response.interface';
@@ -16,7 +16,7 @@ export class ExpensesStateEffects {
 	init$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(ExpensesStateActions.initExpensesState),
-			mergeMap(() =>
+			switchMap(() =>
 				this.expensesService.getExpenses({ page: 5, limit: 10 }).pipe(
 					map((result: ResponseGetExpenses) =>
 						ExpensesStateActions.loadExpensesStateSuccess({ expenses: result.items, numberExpenses: result.count }),
@@ -29,9 +29,9 @@ export class ExpensesStateEffects {
 
 	add$ = createEffect(() =>
 		this.actions$.pipe(
-			ofType(ExpensesStateActions.addExpenseState),
-			mergeMap((requestAddExpense: RequestAddExpense) =>
-				this.expensesService.addExpense(requestAddExpense).pipe(
+			filter(({ type }) => type === ExpensesStateActions.addExpenseState.type),
+			switchMap(({ request }: { request: RequestAddExpense }) =>
+				this.expensesService.addExpense(request).pipe(
 					map(() => ExpensesStateActions.addExpenseStateSuccess(), ExpensesStateActions.initExpensesState()),
 					catchError(() => of(ExpensesStateActions.addExpenseStateFailure())),
 				),
@@ -41,9 +41,9 @@ export class ExpensesStateEffects {
 
 	edit$ = createEffect(() =>
 		this.actions$.pipe(
-			ofType(ExpensesStateActions.editExpenseState),
-			mergeMap((requestEditExpense: RequestEditExpense) =>
-				this.expensesService.editExpense(requestEditExpense).pipe(
+			filter(({ type }) => type === ExpensesStateActions.editExpenseState.type),
+			switchMap(({ request }: { request: RequestEditExpense }) =>
+				this.expensesService.editExpense(request).pipe(
 					map(() => ExpensesStateActions.editExpenseStateSuccess(), ExpensesStateActions.initExpensesState()),
 					catchError(() => of(ExpensesStateActions.editExpenseStateFailure())),
 				),

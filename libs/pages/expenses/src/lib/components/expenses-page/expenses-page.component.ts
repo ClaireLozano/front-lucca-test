@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Signal, signal } from '@angular/core';
 import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-state';
-import { Observable } from 'rxjs';
 
 // Todo : faire un affichage un peu plus sympa pour l'affichage des différentes dépenses
 // Todo : les TU
@@ -21,19 +20,19 @@ import { Observable } from 'rxjs';
 		}
 
 		<!-- Add expense button -->
-		@if (statePageSignal() === 'display' && (expenses$ | async)) {
+		@if (statePageSignal() === 'display' && expensesSignal()) {
 		<nova-button [label]="'Saisir une nouvelle dépense'" (submitButtonEmitter)="onAddExpense()"> </nova-button>
 		<br />
 
 		<!-- Number expenses -->
 		<h2>Nombre de dépenses :</h2>
-		<p>{{ (countExpenses$ | async) || '0' }}</p>
+		<p>{{ countExpensesSignal() || '0' }}</p>
 
 		<!-- Display expenses -->
 		<!-- Si jamais le composant devient trop gros, le mettre dans un autre composant 'expenses-list' -->
 		<h2>Liste des dépenses :</h2>
 		<ul>
-			@for (expense of (expenses$ | async); track expense.id) {
+			@for (expense of expensesSignal(); track expense.id) {
 			<li>
 				<exp-expense-display [expense]="expense" (clickedExpenseEmitter)="editExpense($event)"> </exp-expense-display>
 			</li>
@@ -55,8 +54,8 @@ import { Observable } from 'rxjs';
 })
 export class ExpensesPageComponent {
 	// Get data from resolver
-	public expenses$: Observable<Expense[]> = this.expensesFacade.expenses$;
-	public countExpenses$: Observable<number | undefined> = this.expensesFacade.number$;
+	public expensesSignal: Signal<Expense[]> = this.expensesFacade.expensesSignal;
+	public countExpensesSignal: Signal<number | undefined> = this.expensesFacade.numberSignal;
 
 	// State of page view
 	public statePageSignal: Signal<'display' | 'edit' | 'add'> = signal('display');

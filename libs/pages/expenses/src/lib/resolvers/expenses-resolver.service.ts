@@ -11,9 +11,6 @@ export class ExpensesResolver implements Resolve<string | undefined> {
 	public resolve(): Observable<string | undefined> {
 		this.store.init();
 
-		return this.store.getExpensesStatus$.pipe(
-			// Au moment où status === 'success', takeWhile émettra false et l'observable sera complété
-			takeWhile((status) => status !== 'success', true),
-		);
+		return this.store.getExpensesStatus$.pipe(takeWhile((status) => status !== 'success', true));
 	}
 }

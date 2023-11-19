@@ -12,11 +12,13 @@ export const loadExpensesStateSuccess = createAction(
 export const loadExpensesStateFailure = createAction('[ExpensesState/API] Load ExpensesState Failure');
 
 // Add state
-export const addExpenseState = createAction('[ExpensesState/API] Add ExpenseState Success', props<RequestAddExpense>());
+export const initAddExpenseState = createAction('[ExpensesState/API] Add ExpenseState Init');
+export const addExpenseState = createAction('[ExpensesState/API] Add ExpenseState Loading', props<{ request: RequestAddExpense }>());
 export const addExpenseStateSuccess = createAction('[ExpensesState/API] Add ExpenseState Success');
 export const addExpenseStateFailure = createAction('[ExpensesState/API] Add ExpenseState Failure');
 
 // Edit state
-export const editExpenseState = createAction('[ExpensesState/API] Edit ExpenseState Success', props<RequestEditExpense>());
+export const initEditExpenseState = createAction('[ExpensesState/API] Adit ExpenseState Init');
+export const editExpenseState = createAction('[ExpensesState/API] Edit ExpenseState Loading', props<{ request: RequestEditExpense }>());
 export const editExpenseStateSuccess = createAction('[ExpensesState/API] Edit ExpenseState Success');
 export const editExpenseStateFailure = createAction('[ExpensesState/API] Edit ExpenseState Failure');
