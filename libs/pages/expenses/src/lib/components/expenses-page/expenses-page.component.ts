@@ -1,8 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Signal, signal } from '@angular/core';
 import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-state';
 
-// Todo : faire un affichage un peu plus sympa pour l'affichage des différentes dépenses
-// Todo : les TU
 @Component({
 	selector: 'exp-expenses-page',
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,21 +21,7 @@ import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-
 		@if (statePageSignal() === 'display' && expensesSignal()) {
 		<nova-button [label]="'Saisir une nouvelle dépense'" (submitButtonEmitter)="onAddExpense()"> </nova-button>
 		<br />
-
-		<!-- Number expenses -->
-		<h2>Nombre de dépenses :</h2>
-		<p>{{ countExpensesSignal() || '0' }}</p>
-
-		<!-- Display expenses -->
-		<!-- Si jamais le composant devient trop gros, le mettre dans un autre composant 'expenses-list' -->
-		<h2>Liste des dépenses :</h2>
-		<ul>
-			@for (expense of expensesSignal(); track expense.id) {
-			<li>
-				<exp-expense-display [expense]="expense" (clickedExpenseEmitter)="editExpense($event)"> </exp-expense-display>
-			</li>
-			}
-		</ul>
+		<exp-expenses-list (editExpenseEmitter)="editExpense($event)"></exp-expenses-list>
 		}
 
 		<!-- Edit expense -->
@@ -55,14 +39,13 @@ import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-
 export class ExpensesPageComponent {
 	// Get data from resolver
 	public expensesSignal: Signal<Expense[]> = this.expensesFacade.expensesSignal;
-	public countExpensesSignal: Signal<number | undefined> = this.expensesFacade.numberSignal;
 
 	// State of page view
 	public statePageSignal: Signal<'display' | 'edit' | 'add'> = signal('display');
 
 	public expenseToEditSignal!: Signal<Expense>;
 
-	constructor(private cdr: ChangeDetectorRef, private expensesFacade: ExpensesStateFacade) {}
+	constructor(private expensesFacade: ExpensesStateFacade) {}
 
 	/**
 	 * Display edit expense view
@@ -94,6 +77,5 @@ export class ExpensesPageComponent {
 	 */
 	public onAddExpense(): void {
 		this.statePageSignal = signal('add');
-		this.cdr.markForCheck();
 	}
 }

@@ -13,5 +13,6 @@ export const Primary: Story = {
 		label: 'Label',
 		isRequired: false,
 		isDisabled: false,
+		options: [{ value: 'value', label: 'label' }],
 	},
 };

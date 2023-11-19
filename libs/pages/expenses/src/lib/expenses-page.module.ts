@@ -10,9 +10,10 @@ import { ExpensesPageRoutingModule } from './expenses-page.routes.module';
 import { ExpensesResolver } from './resolvers/expenses-resolver.service';
 import { ExpensesStateModule } from '@front-lucca-test/states/expenses-state';
 import { ExpensesPageComponent } from './components/expenses-page/expenses-page.component';
+import { ExpensesListComponent } from './components/expenses-list/expenses-list.component';
 
 @NgModule({
-	declarations: [ExpensesPageComponent, ExpenseFormComponent, ExpenseDisplayComponent],
+	declarations: [ExpensesPageComponent, ExpenseFormComponent, ExpenseDisplayComponent, ExpensesListComponent],
 	imports: [
 		ExpensesPageRoutingModule,
 		HttpClientModule,
