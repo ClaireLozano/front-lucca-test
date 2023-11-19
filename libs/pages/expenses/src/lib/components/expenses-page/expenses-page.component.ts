@@ -7,6 +7,7 @@ import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-
 	template: `
 		<h1>Expenses page</h1>
 
+		<!-- Todo: mettre un defer pour tester -->
 		<!-- Add expense -->
 		@if (statePageSignal() === 'add') {
 		<exp-expense-form

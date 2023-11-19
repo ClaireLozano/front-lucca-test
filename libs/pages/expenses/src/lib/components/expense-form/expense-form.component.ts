@@ -15,59 +15,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Expense, ExpensesStateFacade, getEditExpenseRequest, getAddExpenseRequest } from '@front-lucca-test/states/expenses-state';
 import { Subscription } from 'rxjs';
 
-// Todo : TU
 @Component({
 	selector: 'exp-expense-form',
+	templateUrl: './expense-form.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	template: ` <h2>{{ title }}</h2>
-		Champs obligatoires *<br /><br />
-
-		<!-- Form -->
-		<form [formGroup]="form" (ngSubmit)="onSubmit()">
-			<nova-select-input
-				[control]="natureControl"
-				[label]="'Nature'"
-				[isDisabled]="this.action === 'edit'"
-				[name]="'nature'"
-				[options]="options"
-				[isRequired]="true"
-			>
-			</nova-select-input>
-			<br /><br />
-			<nova-input
-				[control]="amountControl"
-				[label]="'Amount (doit être superieur à zéro)'"
-				[type]="'number'"
-				[name]="'amount'"
-				[isRequired]="true"
-			></nova-input>
-			<br /><br />
-			<nova-textarea [control]="commentControl" [label]="'Comment'" [name]="'comment'" [isRequired]="true"> </nova-textarea>
-			<br /><br />
-			<nova-input [control]="purchasedOnControl" [label]="'PurchasedOn'" [type]="'date'" [name]="'purchasedOn'" [isRequired]="true">
-			</nova-input>
-			<br /><br />
-			@if (natureValueSignal() === "trip") {
-			<nova-input [control]="distanceControl" [label]="'Distance'" [type]="'number'" [name]="'distance'" [isRequired]="true"></nova-input>
-			<br /><br />
-			} @if (natureValueSignal() === "restaurant") {
-			<nova-input [control]="invitesControl" [label]="'Invites'" [type]="'number'" [name]="'invites'" [isRequired]="true"></nova-input>
-			<br /><br />
-			}
-
-			<!-- Error messages -->
-			@if (errorFormSignal() === 'invalid') {
-			<p>Formulaire invalide, veuillez saisir tous les champs obligatoires</p>
-			} @if (errorFormSignal() === 'pristine') {
-			<p>Aucune modification n'a été saisi</p>
-			} @if (errorFormSignal() === 'apiError') {
-			<p>Une erreur est survenu, veuillez réessayer plus tard</p>
-			}
-
-			<!-- Buttons -->
-			<nova-button [label]="'Cancel'" (submitButtonEmitter)="onCancel()"></nova-button>
-			<nova-button [label]="'Submit'" [type]="'submit'"></nova-button><br />
-		</form>`,
 })
 export class ExpenseFormComponent implements OnInit, OnDestroy {
 	@Input()
@@ -197,7 +148,6 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 
 			const request = getEditExpenseRequest(this.expense.id, this.form);
 			this.expensesFacade.editExpense(request);
-
 			return;
 		}
 
