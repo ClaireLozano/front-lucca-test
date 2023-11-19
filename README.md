@@ -73,3 +73,4 @@ En me rapprochant au mieux du conventionnal commit => https://www.conventionalco
 -   peut-être regardé pour créer des formulaires dynamiques à partir d'un fichier json en fonction du type de dépense
 -   mis en place des loader et loading page
 -   pour les inputs qui n'autorise que des number, j'aurai rajouté des règles de gestion supplémentaire pour ne pas autoriser certains char comme "E"
+-   mis plus de règles ESLint/Prettier, j'ai pas pris le temps de regarder tous ce qui était possible
