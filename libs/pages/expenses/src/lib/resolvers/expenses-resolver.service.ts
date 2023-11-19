@@ -3,7 +3,6 @@ import { Resolve } from '@angular/router';
 import { ExpensesStateFacade } from '@front-lucca-test/states/expenses-state';
 import { Observable, takeWhile } from 'rxjs';
 
-// Todo : rediriger vers une page d'erreur en cas d'erreur
 @Injectable()
 export class ExpensesResolver implements Resolve<string | undefined> {
 	constructor(private readonly store: ExpensesStateFacade) {}

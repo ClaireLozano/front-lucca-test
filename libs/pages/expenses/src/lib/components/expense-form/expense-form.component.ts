@@ -16,7 +16,6 @@ import { Expense, ExpensesStateFacade, getEditExpenseRequest, getAddExpenseReque
 import { Subscription } from 'rxjs';
 
 // Todo : TU
-// Todo : creer un fichier de constante pour y mettre tous les types de form control et les options du select
 @Component({
 	selector: 'exp-expense-form',
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -84,7 +83,6 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	@Output() public cancelExpenseEmitter: EventEmitter<void> = new EventEmitter();
 
 	// Form
-	// Todo : typer le formulaire, et pourquoi pas mettre le type dans un interface.ts
 	public natureControl: FormControl = new FormControl('restaurant', Validators.required);
 	public amountControl: FormControl = new FormControl('', [Validators.required, Validators.min(0.01)]);
 	public commentControl: FormControl = new FormControl('', Validators.required);
@@ -95,7 +93,6 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		comment: this.commentControl,
 		purchasedOn: this.purchasedOnControl,
 	});
-	// Todo : voir pour rajouter des règles de gestion dans les inputs, un input de type number autorise certains char comme "E"
 	public distanceControl: FormControl = new FormControl('', [Validators.required, Validators.min(0)]);
 	public invitesControl: FormControl = new FormControl('', Validators.required);
 	public options: { value: string; label: string }[] = [

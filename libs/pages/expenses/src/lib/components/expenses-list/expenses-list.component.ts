@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output, Signal } from '@angular/core';
 import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-state';
 
-// Todo : faire un affichage un peu plus sympa pour l'affichage des différentes dépenses
 @Component({
 	selector: 'exp-expenses-list',
 	changeDetection: ChangeDetectionStrategy.OnPush,
