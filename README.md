@@ -18,7 +18,7 @@ Avant toute chose, je n'ai jamais initié de projet de ma vie, c'est mon tout pr
 
 ### NX
 
-J'ai voulu profiter de ce projet pour me former sur NX. Vu la taille de l'application qui m'a été demandée, on n'était clairement pas obligé de partir là dessus. Ou alors on pourrait ce dire que ce que vous m'avez demandé n'est pas le projet fini et donc là oui, NX peut être une bonne solution.
+J'ai voulu profiter de ce projet pour me former sur NX. Vu la taille de l'application qui m'a été demandée, on n'était clairement pas obligé de partir là dessus. Ou alors on pourrait se dire que ce que vous m'avez demandé n'est pas le projet fini et donc là oui, NX peut être une bonne solution.
 
 ### NGRX
 
