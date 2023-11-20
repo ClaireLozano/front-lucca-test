@@ -18,5 +18,22 @@ export const Primary: Story = {
 	args: {
 		label: 'Button',
 		type: 'button',
+		pressed: false,
+	},
+};
+
+export const PressedButton: Story = {
+	args: {
+		label: 'Button',
+		type: 'button',
+		pressed: true,
+	},
+};
+
+export const SubmitButton: Story = {
+	args: {
+		label: 'Button',
+		type: 'button',
+		pressed: true,
 	},
 };

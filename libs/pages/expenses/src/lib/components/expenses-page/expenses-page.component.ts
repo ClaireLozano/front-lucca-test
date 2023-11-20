@@ -39,7 +39,9 @@ import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-
 })
 export class ExpensesPageComponent {
 	// Get data from resolver
-	public expensesSignal: Signal<Expense[]> = this.expensesFacade.expensesSignal;
+	public expensesSignal: Signal<{
+		[key: number]: Expense[];
+	}> = this.expensesFacade.expensesSignal;
 
 	// State of page view
 	public statePageSignal: Signal<'display' | 'edit' | 'add'> = signal('display');

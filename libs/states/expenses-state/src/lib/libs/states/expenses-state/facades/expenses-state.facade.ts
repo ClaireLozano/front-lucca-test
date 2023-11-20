@@ -23,6 +23,7 @@ export class ExpensesStateFacade {
 	readonly getExpensesStatusSignal = this.store.selectSignal(ExpensesStateSelectors.selectGetExpensesStatus);
 	readonly addExpenseStatusSignal = this.store.selectSignal(ExpensesStateSelectors.selectAddExpenseStatus);
 	readonly editExpenseStatusSignal = this.store.selectSignal(ExpensesStateSelectors.selectEditExpenseStatus);
+	readonly currentPageNumberSignal = this.store.selectSignal(ExpensesStateSelectors.selectCurrentPageNumber);
 
 	/**
 	 * Functions
@@ -45,5 +46,9 @@ export class ExpensesStateFacade {
 
 	public editExpense(expense: RequestEditExpense): void {
 		this.store.dispatch(ExpensesStateActions.editExpenseState({ request: expense }));
+	}
+
+	public setCurrentPageNumber(currentPageNumber: number): void {
+		this.store.dispatch(ExpensesStateActions.setCurrentPageNumber({ currentPageNumber: currentPageNumber }));
 	}
 }

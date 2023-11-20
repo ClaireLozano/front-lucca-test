@@ -6,7 +6,18 @@ import { CommonModule } from '@angular/common';
 	standalone: true,
 	imports: [CommonModule],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	template: ` <button [attr.type]="type" (click)="onSubmitButton()">{{ label }}</button> `,
+	styles: [
+		`
+			.pressed-button {
+				font-size: 18px;
+			}
+		`,
+	],
+	template: `
+		<button [attr.type]="type" [attr.aria-pressed]="pressed" (click)="onSubmitButton()">
+			<p [class.pressed-button]="pressed">{{ label }}</p>
+		</button>
+	`,
 })
 export class ButtonComponent {
 	@Input({ required: true })
@@ -14,6 +25,9 @@ export class ButtonComponent {
 
 	@Input()
 	public type: 'button' | 'submit' = 'button';
+
+	@Input()
+	public pressed: boolean = false;
 
 	@Output()
 	public submitButtonEmitter: EventEmitter<void> = new EventEmitter();

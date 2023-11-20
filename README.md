@@ -67,7 +67,6 @@ En me rapprochant au mieux du conventionnal commit => https://www.conventionalco
 -   géré un peu mieux les messages d'erreurs, là je suis allé au plus simple
 -   créé des states pour chaques éléments de mon storybook
 -   mis du CSS ♡ et fait un rendu un peu plus jolie
--   fait un meilleur affichage de ma liste de dépense avec 10 dépenses par page par exemple
 -   plus de test (TU + cypress)
 -   meilleure gestion des erreurs, par exemple l'api ne répond pas
 -   peut-être regardé pour créer des formulaires dynamiques à partir d'un fichier json en fonction du type de dépense

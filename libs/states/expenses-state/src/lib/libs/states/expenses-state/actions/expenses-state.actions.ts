@@ -22,3 +22,6 @@ export const initEditExpenseState = createAction('[ExpensesState/API] Adit Expen
 export const editExpenseState = createAction('[ExpensesState/API] Edit ExpenseState Loading', props<{ request: RequestEditExpense }>());
 export const editExpenseStateSuccess = createAction('[ExpensesState/API] Edit ExpenseState Success');
 export const editExpenseStateFailure = createAction('[ExpensesState/API] Edit ExpenseState Failure');
+
+// Set current number page
+export const setCurrentPageNumber = createAction('[ExpensesState] Set current number page', props<{ currentPageNumber: number }>());

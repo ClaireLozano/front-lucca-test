@@ -12,11 +12,12 @@ export const CallStatus = {
 };
 
 export interface ExpensesState extends EntityState<Expense> {
-	expenses: Expense[];
+	expenses: { [key: number]: Expense[] };
 	numberExpenses: number | undefined;
 	getExpensesStatus: string | undefined;
 	addExpenseStatus: string | undefined;
 	editExpenseStatus: string | undefined;
+	currentPageNumber: number;
 }
 
 export interface ExpensesStatePartialState {
@@ -31,6 +32,7 @@ export const initialExpensesState: ExpensesState = expensesState.getInitialState
 	getExpensesStatus: undefined,
 	addExpenseStatus: undefined,
 	editExpenseStatus: undefined,
+	currentPageNumber: 0,
 });
 
 const reducer = createReducer(
@@ -42,13 +44,13 @@ const reducer = createReducer(
 	})),
 	on(ExpensesStateActions.loadExpensesStateSuccess, (state, { expenses, numberExpenses }) => ({
 		...state,
-		expenses: expenses,
+		expenses: restructureExpenses(expenses, 5),
 		numberExpenses: numberExpenses,
 		getExpensesStatus: CallStatus.success,
 	})),
 	on(ExpensesStateActions.loadExpensesStateFailure, (state) => ({
 		...state,
-		expenses: [],
+		expenses: {},
 		numberExpenses: undefined,
 		getExpensesStatus: CallStatus.error,
 	})),
@@ -88,8 +90,28 @@ const reducer = createReducer(
 		...state,
 		editExpenseStatus: CallStatus.error,
 	})),
+
+	// Current page number
+	on(ExpensesStateActions.setCurrentPageNumber, (state, { currentPageNumber }) => ({
+		...state,
+		currentPageNumber: currentPageNumber,
+	})),
 );
 
 export function expensesStateReducer(state: ExpensesState | undefined, action: Action) {
 	return reducer(state, action);
+}
+
+function restructureExpenses(expenses: Expense[], chunkSize: number): { [key: number]: Expense[] } {
+	return expenses.reduce((result: { [key: number]: Expense[] }, expense: Expense, index: number) => {
+		const chunkIndex = Math.floor(index / chunkSize);
+
+		if (!result[chunkIndex]) {
+			result[chunkIndex] = [];
+		}
+
+		result[chunkIndex].push(expense);
+
+		return result;
+	}, {});
 }

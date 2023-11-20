@@ -5,6 +5,7 @@ export const selectExpensesState = createFeatureSelector<ExpensesState>(EXPENSES
 
 export const selectExpenses = createSelector(selectExpensesState, (state: ExpensesState) => state.expenses);
 export const selectNumber = createSelector(selectExpensesState, (state: ExpensesState) => state.numberExpenses);
+export const selectCurrentPageNumber = createSelector(selectExpensesState, (state: ExpensesState) => state.currentPageNumber);
 
 export const selectGetExpensesStatus = createSelector(selectExpensesState, (state: ExpensesState) => state.getExpensesStatus);
 export const selectAddExpenseStatus = createSelector(selectExpensesState, (state: ExpensesState) => state.addExpenseStatus);

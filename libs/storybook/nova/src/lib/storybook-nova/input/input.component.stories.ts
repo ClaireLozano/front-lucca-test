@@ -17,6 +17,7 @@ type Story = StoryObj<InputComponent>;
 export const Primary: Story = {
 	args: {
 		type: 'text',
+		name: 'name',
 		label: 'Label',
 		isRequired: false,
 	},
