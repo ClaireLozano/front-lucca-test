@@ -66,6 +66,7 @@ En me rapprochant au mieux du conventionnal commit => https://www.conventionalco
 -   créé plus de contantes pour les messages, titres, labels, etc.
 -   géré un peu mieux les messages d'erreurs, là je suis allé au plus simple
 -   créé des states pour chaques éléments de mon storybook
+-   faire une lib par composant de storybook
 -   mis du CSS ♡ et fait un rendu un peu plus jolie
 -   plus de test (TU + cypress)
 -   meilleure gestion des erreurs, par exemple l'api ne répond pas
