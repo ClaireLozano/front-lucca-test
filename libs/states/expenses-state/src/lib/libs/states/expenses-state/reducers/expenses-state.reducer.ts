@@ -67,10 +67,12 @@ const reducer = createReducer(
 	on(ExpensesStateActions.addExpenseStateSuccess, (state) => ({
 		...state,
 		addExpenseStatus: CallStatus.success,
+		currentPageNumber: 0,
 	})),
 	on(ExpensesStateActions.addExpenseStateFailure, (state) => ({
 		...state,
 		addExpenseStatus: CallStatus.error,
+		currentPageNumber: 0,
 	})),
 
 	// Edit expense reducer
