@@ -72,7 +72,7 @@ export class ExpensesPageComponent {
 		this.expensesFacade.init();
 
 		this.statePageSignal = signal('display');
-		alert('Votre dépense à bien été saisie !');
+		alert('Votre dépense a bien été saisie !');
 	}
 
 	/**

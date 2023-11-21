@@ -227,7 +227,7 @@ describe('ExpenseFormComponent', () => {
 
 			it('should display untouched form error message', () => {
 				const errorMessage = fixture.debugElement.query(By.css('.error-message')).nativeElement;
-				expect(errorMessage.textContent.trim()).toEqual("Aucune modification n'a été saisi");
+				expect(errorMessage.textContent.trim()).toEqual("Aucune modification n'a été saisie");
 			});
 
 			describe('when user modifies the form', () => {
@@ -311,7 +311,7 @@ describe('ExpenseFormComponent', () => {
 
 			it('should display untouched form error message', () => {
 				const errorMessage = fixture.debugElement.query(By.css('.error-message')).nativeElement;
-				expect(errorMessage.textContent.trim()).toEqual("Aucune modification n'a été saisi");
+				expect(errorMessage.textContent.trim()).toEqual("Aucune modification n'a été saisie");
 			});
 
 			describe('when user modifies the form', () => {
