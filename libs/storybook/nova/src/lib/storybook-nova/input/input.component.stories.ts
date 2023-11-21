@@ -1,24 +1,47 @@
-import type { Meta, StoryObj } from '@storybook/angular';
+import { moduleMetadata, type Meta, type StoryFn } from '@storybook/angular';
 import { InputComponent } from './input.component';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 
-const meta: Meta<InputComponent> = {
-	component: InputComponent,
+export default {
 	title: 'InputComponent',
+	component: InputComponent,
+	decorators: [
+		moduleMetadata({
+			imports: [ReactiveFormsModule],
+		}),
+	],
 	argTypes: {
 		type: {
 			options: ['text', 'number', 'date'],
 			control: { type: 'radio' },
 		},
+		control: { table: { disable: true } },
 	},
-};
-export default meta;
-type Story = StoryObj<InputComponent>;
+} as Meta;
 
-export const Primary: Story = {
-	args: {
-		type: 'text',
-		name: 'name',
-		label: 'Label',
-		isRequired: false,
-	},
+const Template: StoryFn<InputComponent> = (args: InputComponent) => ({
+	component: InputComponent,
+	props: args,
+});
+
+export const Default = Template.bind({});
+Default.args = {
+	control: new FormControl(''),
+	label: 'Label',
+	type: 'text',
+	name: 'name',
+	isRequired: false,
+};
+
+export const WithValue = Template.bind({});
+WithValue.args = {
+	...Default.args,
+	control: new FormControl('value'),
+};
+
+export const Required = Template.bind({});
+Required.args = {
+	...Default.args,
+	isRequired: true,
+	control: new FormControl(''),
 };

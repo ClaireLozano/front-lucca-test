@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/angular';
+import type { StoryFn } from '@storybook/angular';
 import { ButtonComponent } from './button.component';
 
-const meta: Meta<ButtonComponent> = {
+export default {
 	component: ButtonComponent,
 	title: 'ButtonComponent',
 	argTypes: {
@@ -11,29 +11,27 @@ const meta: Meta<ButtonComponent> = {
 		},
 	},
 };
-export default meta;
-type Story = StoryObj<ButtonComponent>;
 
-export const Primary: Story = {
-	args: {
-		label: 'Button',
-		type: 'button',
-		pressed: false,
-	},
+const Template: StoryFn<ButtonComponent> = (args: ButtonComponent) => ({
+	component: ButtonComponent,
+	props: args,
+});
+
+export const Default = Template.bind({});
+Default.args = {
+	label: 'label',
+	type: 'button',
+	pressed: false,
 };
 
-export const PressedButton: Story = {
-	args: {
-		label: 'Button',
-		type: 'button',
-		pressed: true,
-	},
+export const PressedButton = Template.bind({});
+PressedButton.args = {
+	...Default.args,
+	pressed: true,
 };
 
-export const SubmitButton: Story = {
-	args: {
-		label: 'Button',
-		type: 'button',
-		pressed: true,
-	},
+export const SubmitButton = Template.bind({});
+SubmitButton.args = {
+	...Default.args,
+	type: 'submit',
 };
