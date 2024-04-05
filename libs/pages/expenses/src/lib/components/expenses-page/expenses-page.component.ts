@@ -3,39 +3,8 @@ import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-
 
 @Component({
 	selector: 'exp-expenses-page',
+	templateUrl: './expenses-page.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	template: `
-		<h1>Expenses page</h1>
-
-		<!-- Todo: mettre un defer pour tester -->
-		<!-- Add expense -->
-		@if (statePageSignal() === 'add') {
-		<exp-expense-form
-			[action]="'add'"
-			[title]="'Saisir une dépense'"
-			(submitExpenseEmitter)="formSubmit()"
-			(cancelExpenseEmitter)="cancelForm()"
-		></exp-expense-form>
-		}
-
-		<!-- Add expense button -->
-		@if (statePageSignal() === 'display' && expensesSignal()) {
-		<nova-button [label]="'Saisir une nouvelle dépense'" (submitButtonEmitter)="onAddExpense()"> </nova-button>
-		<br />
-		<exp-expenses-list (editExpenseEmitter)="editExpense($event)"></exp-expenses-list>
-		}
-
-		<!-- Edit expense -->
-		@if (statePageSignal() === 'edit') {
-		<exp-expense-form
-			[expense]="expenseToEditSignal()"
-			[action]="'edit'"
-			[title]="'Editer une dépense'"
-			(submitExpenseEmitter)="formSubmit()"
-			(cancelExpenseEmitter)="cancelForm()"
-		></exp-expense-form>
-		}
-	`,
 })
 export class ExpensesPageComponent {
 	// Get data from resolver

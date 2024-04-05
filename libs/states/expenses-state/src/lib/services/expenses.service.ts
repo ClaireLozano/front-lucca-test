@@ -9,7 +9,7 @@ import { ResponseGetExpenses } from '../models/get-expenses/get-expenses-respons
 // Todo
 const environment = {
 	expenseApiUrl: 'http://localhost:3000',
-};
+} as const;
 
 @Injectable()
 export class ExpensesService {

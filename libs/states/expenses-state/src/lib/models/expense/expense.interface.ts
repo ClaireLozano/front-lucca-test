@@ -1,4 +1,9 @@
-interface BaseExpense {
+export const NATURE_TRIP = 'trip';
+export const NATURE_RESTAURANT = 'restaurant';
+
+export type NatureType = typeof NATURE_TRIP | typeof NATURE_RESTAURANT;
+
+export interface BaseExpense {
 	id: number;
 	amount: number;
 	comment: string;
@@ -7,12 +12,12 @@ interface BaseExpense {
 }
 
 export interface TripExpense extends BaseExpense {
-	nature: 'trip';
+	nature: typeof NATURE_TRIP;
 	distance: number;
 }
 
 export interface RestaurantExpense extends BaseExpense {
-	nature: 'restaurant';
+	nature: typeof NATURE_RESTAURANT;
 	invites: number;
 }
 

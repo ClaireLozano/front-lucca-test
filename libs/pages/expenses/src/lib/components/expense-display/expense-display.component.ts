@@ -3,14 +3,8 @@ import { Expense } from '@front-lucca-test/states/expenses-state';
 
 @Component({
 	selector: 'exp-expense-display',
+	templateUrl: './expense-display.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	template: `
-		<div *ngIf="this.expense" (click)="clickedExpense()">
-			@for (attribute of expenseToDisplaySignal(); track $index) {
-			<p>{{ attribute.key }}: {{ attribute.value }}</p>
-			}
-		</div>
-	`,
 })
 export class ExpenseDisplayComponent implements OnInit {
 	@Input({ required: true })

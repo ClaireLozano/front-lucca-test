@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import * as fromExpensesState from './libs/states/expenses-state/reducers/expenses-state.reducer';
-import { ExpensesStateEffects } from './libs/states/expenses-state/effects/expenses-state.effects';
-import { ExpensesStateFacade } from './libs/states/expenses-state/facades/expenses-state.facade';
-import { ExpensesService } from './libs/states/expenses-state/services/expenses.service';
+import * as fromExpensesState from './reducers/expenses-state.reducer';
+import { ExpensesStateEffects } from './effects/expenses-state.effects';
+import { ExpensesStateFacade } from './facades/expenses-state.facade';
+import { ExpensesService } from './services/expenses.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 

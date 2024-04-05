@@ -3,34 +3,8 @@ import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-
 
 @Component({
 	selector: 'exp-expenses-list',
+	templateUrl: './expenses-list.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	template: `
-		<!-- Number expenses -->
-		<h2>Nombre de dépenses :</h2>
-		<p>{{ countExpensesSignal() || '0' }}</p>
-
-		<!-- Display expenses -->
-		<h2>Liste des dépenses :</h2>
-		<ul>
-			@for (expense of expensesSignal()[actualPageNumberSignal()]; track expense.id) {
-			<li>
-				<exp-expense-display [expense]="expense" (clickedExpenseEmitter)="editExpense($event)"> </exp-expense-display>
-			</li>
-			}
-
-			<!-- Pagination -->
-			<div>
-				<nova-button
-					*ngFor="let key of numberOfPagesSignal()"
-					[id]="'page-' + key"
-					[label]="key.toString()"
-					[pressed]="actualPageNumberSignal().toString() === key ? true : false"
-					(click)="pageNumberClick(key.toString())"
-				>
-				</nova-button>
-			</div>
-		</ul>
-	`,
 })
 export class ExpensesListComponent {
 	public expensesSignal: Signal<{

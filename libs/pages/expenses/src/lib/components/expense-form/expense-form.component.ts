@@ -12,7 +12,17 @@ import {
 	signal,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Expense, ExpensesStateFacade, getEditExpenseRequest, getAddExpenseRequest } from '@front-lucca-test/states/expenses-state';
+import {
+	Expense,
+	ExpensesStateFacade,
+	getEditExpenseRequest,
+	getAddExpenseRequest,
+	NATURE_RESTAURANT,
+	NatureType,
+	NATURE_TRIP,
+	isRestaurantNature,
+	isTripExpense,
+} from '@front-lucca-test/states/expenses-state';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -47,11 +57,11 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	public distanceControl: FormControl = new FormControl('', [Validators.required, Validators.min(0)]);
 	public invitesControl: FormControl = new FormControl('', Validators.required);
 	public options: { value: string; label: string }[] = [
-		{ value: 'restaurant', label: 'Restaurant' },
-		{ value: 'trip', label: 'Trip' },
+		{ value: NATURE_RESTAURANT, label: 'Restaurant' },
+		{ value: NATURE_TRIP, label: 'Trip' },
 	];
 
-	public natureValueSignal!: Signal<'trip' | 'restaurant'>;
+	public natureValueSignal!: Signal<NatureType>;
 	public errorFormSignal: Signal<'invalid' | 'pristine' | 'apiError' | undefined> = signal(undefined);
 
 	private subscription: Subscription = new Subscription();
@@ -92,7 +102,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		if (this.action === 'edit') {
 			this.natureControl.disable();
 		}
-		this.setSpecialControl(this.expense?.nature || 'restaurant');
+		this.setSpecialControl(this.expense?.nature || NATURE_RESTAURANT);
 	}
 
 	/**
@@ -100,17 +110,17 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	 * add "invities" control if the nature of the expense is "restaurant"
 	 * add "distance" control if the nature of the expense is "trip"
 	 */
-	private setSpecialControl(nature: 'restaurant' | 'trip'): void {
-		if (nature === 'restaurant') {
+	private setSpecialControl(nature: NatureType): void {
+		if (isRestaurantNature(nature)) {
 			this.form.removeControl('distance');
 			this.form.addControl('invites', this.invitesControl);
-			this.natureValueSignal = signal('restaurant');
+			this.natureValueSignal = signal(NATURE_RESTAURANT);
 			return;
 		}
 
 		this.form.removeControl('invites');
 		this.form.addControl('distance', this.distanceControl);
-		this.natureValueSignal = signal('trip');
+		this.natureValueSignal = signal(NATURE_TRIP);
 	}
 
 	/**
@@ -168,10 +178,10 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		this.form.get('amount')?.patchValue(this.expense.amount);
 		this.form.get('comment')?.patchValue(this.expense.comment);
 		this.form.get('purchasedOn')?.patchValue(this.expense.purchasedOn);
-		if (this.expense?.nature === 'trip') {
+		if (isTripExpense(this.expense)) {
 			this.form.get('distance')?.patchValue(this.expense.distance);
 			return;
 		}
-		this.form.get('invites')?.patchValue(this.expense?.invites);
+		this.form.get('invites')?.patchValue(this.expense.invites);
 	}
 }
