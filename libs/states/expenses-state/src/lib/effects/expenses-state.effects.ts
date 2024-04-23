@@ -6,6 +6,7 @@ import { ExpensesService } from '../services/expenses.service';
 import { ResponseGetExpenses } from '../models/get-expenses/get-expenses-response.interface';
 import { RequestAddExpense } from '../models/add-expense/add-expense-request.interface';
 import { RequestEditExpense } from '../models/edit-expense/edit-expense-request.interface';
+import { Expense } from '../models/expense/expense.interface';
 
 @Injectable()
 export class ExpensesStateEffects {
@@ -22,6 +23,18 @@ export class ExpensesStateEffects {
 						ExpensesStateActions.loadExpensesStateSuccess({ expenses: result.items, numberExpenses: result.count }),
 					),
 					catchError(() => of(ExpensesStateActions.loadExpensesStateFailure())),
+				),
+			),
+		),
+	);
+
+	getById$ = createEffect(() =>
+		this.actions$.pipe(
+			filter(({ type }) => type === ExpensesStateActions.getExpenseByIdState.type),
+			switchMap(({ id }: { id: number }) =>
+				this.expensesService.getExpenseById(id).pipe(
+					map((result: Expense) => ExpensesStateActions.getExpenseByIdStateSuccess({ expense: result })),
+					catchError(() => of(ExpensesStateActions.getExpenseByIdStateFailure())),
 				),
 			),
 		),

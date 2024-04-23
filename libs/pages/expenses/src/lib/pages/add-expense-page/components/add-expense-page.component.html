@@ -1,0 +1,8 @@
+<h1>Expense page</h1>
+
+<exp-expense-form
+	[action]="'add'"
+	[title]="'Ajouter une dépense'"
+	(submitExpenseEmitter)="formSubmit()"
+	(cancelExpenseEmitter)="cancelForm()"
+></exp-expense-form>

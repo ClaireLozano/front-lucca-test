@@ -7,6 +7,8 @@ export const appRoutes: Route[] = [
 	{ path: '', redirectTo: 'expenses' },
 	{
 		path: 'expenses',
+		// component: Component-name
+		// Pour lazy loader une route :
 		loadChildren: () => import('@front-lucca-test/expenses').then((m) => m.ExpensesPageModule),
 	},
 ];

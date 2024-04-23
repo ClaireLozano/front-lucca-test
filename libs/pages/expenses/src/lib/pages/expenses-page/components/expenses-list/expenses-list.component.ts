@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output, Signal, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output, Signal, computed, inject } from '@angular/core';
 import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-state';
 
 @Component({
@@ -7,6 +7,10 @@ import { Expense, ExpensesStateFacade } from '@front-lucca-test/states/expenses-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpensesListComponent {
+	private expensesFacade = inject(ExpensesStateFacade);
+
+	@Output() public editExpenseEmitter: EventEmitter<Expense> = new EventEmitter();
+
 	public expensesSignal: Signal<{
 		[key: number]: Expense[];
 	}> = this.expensesFacade.expensesSignal;
@@ -18,10 +22,6 @@ export class ExpensesListComponent {
 	public numberOfPagesSignal: Signal<string[]> = computed(() => {
 		return Object.keys(this.expensesSignal());
 	});
-
-	@Output() public editExpenseEmitter: EventEmitter<Expense> = new EventEmitter();
-
-	constructor(private expensesFacade: ExpensesStateFacade) {}
 
 	/**
 	 * Display edit expense view

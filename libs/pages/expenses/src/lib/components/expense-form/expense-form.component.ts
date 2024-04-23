@@ -9,6 +9,7 @@ import {
 	Output,
 	Signal,
 	effect,
+	inject,
 	signal,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -31,8 +32,8 @@ import { Subscription } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpenseFormComponent implements OnInit, OnDestroy {
-	@Input()
-	public expense?: Expense;
+	private expensesFacade = inject(ExpensesStateFacade);
+	private cdr = inject(ChangeDetectorRef);
 
 	@Input({ required: true })
 	public title!: string;
@@ -61,14 +62,19 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		{ value: NATURE_TRIP, label: 'Trip' },
 	];
 
+	public expense?: Expense = this.expensesFacade.editingExpenseSignal();
+
 	public natureValueSignal!: Signal<NatureType>;
 	public errorFormSignal: Signal<'invalid' | 'pristine' | 'apiError' | undefined> = signal(undefined);
 
 	private subscription: Subscription = new Subscription();
 
-	constructor(private cdr: ChangeDetectorRef, private expensesFacade: ExpensesStateFacade) {
-		this.expensesFacade.initAddExpense();
-		this.expensesFacade.initEditExpense();
+	constructor() {
+		if (this.action === 'add') {
+			this.expensesFacade.initAddExpense();
+		} else {
+			this.expensesFacade.initEditExpense();
+		}
 
 		effect(() => {
 			if (this.expensesFacade.editExpenseStatusSignal() === 'error' || this.expensesFacade.addExpenseStatusSignal() === 'error') {
@@ -78,11 +84,18 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 				this.submitExpenseEmitter.emit();
 			}
 		});
+
+		effect(() => {
+			this.expense = this.expensesFacade.editingExpenseSignal();
+			if (this.expense) {
+				this.fillForm();
+				this.cdr.detectChanges;
+			}
+		});
 	}
 
 	public ngOnInit(): void {
 		this.initForm();
-		this.fillForm();
 
 		this.subscription.add(
 			this.form.get('nature')?.valueChanges.subscribe((value) => {
@@ -95,9 +108,6 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		this.subscription.unsubscribe();
 	}
 
-	/**
-	 * Init the form
-	 */
 	private initForm(): void {
 		if (this.action === 'edit') {
 			this.natureControl.disable();
@@ -123,9 +133,6 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		this.natureValueSignal = signal(NATURE_TRIP);
 	}
 
-	/**
-	 * On cancel, send event
-	 */
 	public onCancel(): void {
 		this.cancelExpenseEmitter.emit();
 	}

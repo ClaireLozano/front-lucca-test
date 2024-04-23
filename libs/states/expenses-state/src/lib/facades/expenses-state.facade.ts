@@ -14,11 +14,13 @@ export class ExpensesStateFacade {
 	 * Observables
 	 */
 	public getExpensesStatus$ = this.store.pipe(select(ExpensesStateSelectors.selectGetExpensesStatus));
+	public getExpenseStatus$ = this.store.pipe(select(ExpensesStateSelectors.selectGetExpenseByIdStatus));
 
 	/**
 	 * Signals
 	 */
 	readonly expensesSignal = this.store.selectSignal(ExpensesStateSelectors.selectExpenses);
+	readonly editingExpenseSignal = this.store.selectSignal(ExpensesStateSelectors.selectEditingExpense);
 	readonly numberSignal = this.store.selectSignal(ExpensesStateSelectors.selectNumber);
 	readonly getExpensesStatusSignal = this.store.selectSignal(ExpensesStateSelectors.selectGetExpensesStatus);
 	readonly addExpenseStatusSignal = this.store.selectSignal(ExpensesStateSelectors.selectAddExpenseStatus);
@@ -32,12 +34,20 @@ export class ExpensesStateFacade {
 		this.store.dispatch(ExpensesStateActions.initExpensesState());
 	}
 
+	public initGetExpenseById(): void {
+		this.store.dispatch(ExpensesStateActions.initGetExpenseByIdState());
+	}
+
 	public initAddExpense(): void {
 		this.store.dispatch(ExpensesStateActions.initAddExpenseState());
 	}
 
 	public initEditExpense(): void {
 		this.store.dispatch(ExpensesStateActions.initEditExpenseState());
+	}
+
+	public getExpenseById(id: number): void {
+		this.store.dispatch(ExpensesStateActions.getExpenseByIdState({ id: id }));
 	}
 
 	public addExpense(expense: RequestAddExpense): void {

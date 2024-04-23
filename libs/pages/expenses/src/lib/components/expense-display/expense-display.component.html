@@ -1,5 +1,0 @@
-<div *ngIf="this.expense" (click)="clickedExpense()">
-	@for (attribute of expenseToDisplaySignal(); track $index) {
-	<p>{{ attribute.key }}: {{ attribute.value }}</p>
-	}
-</div>

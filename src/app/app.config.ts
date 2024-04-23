@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { EffectsModule } from '@ngrx/effects';
@@ -9,7 +9,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 export const appConfig: ApplicationConfig = {
 	providers: [
 		provideClientHydration(),
-		provideRouter(appRoutes),
+		provideRouter(appRoutes, withComponentInputBinding()),
 		importProvidersFrom(
 			StoreModule.forRoot([], {
 				metaReducers: [],

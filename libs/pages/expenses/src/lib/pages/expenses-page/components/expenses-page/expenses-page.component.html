@@ -1,0 +1,8 @@
+<h1>Expenses page</h1>
+
+<!-- Add expense button -->
+<nova-button [label]="'Saisir une nouvelle dépense'" routerLink="/expenses/add"> </nova-button>
+<br />
+
+<!-- Expenses list -->
+<exp-expenses-list (editExpenseEmitter)="editExpense($event)"></exp-expenses-list>

@@ -1,0 +1,11 @@
+<div *ngIf="this.expense" (click)="clickedExpense()">
+	@for (attribute of expenseToDisplaySignal(); track $index) { @switch (attribute.key) { @case('amount') {
+	<p>{{ attribute.key }}: {{ attribute.value | currency : 'EUR' }}</p>
+	} @case('purchasedOn') {
+	<p>{{ attribute.key }}: {{ attribute.value | date : "dd/MMM/yyyy 'à' hh:mm" }}</p>
+	} @case('updatedAt') {
+	<p>{{ attribute.key }}: {{ attribute.value | date : "dd/MMM/yyyy 'à' hh:mm" }}</p>
+	} @default {
+	<p>{{ attribute.key }}: {{ attribute.value }}</p>
+	} } }
+</div>

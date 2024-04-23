@@ -13,8 +13,10 @@ export const CallStatus = {
 
 export interface ExpensesState extends EntityState<Expense> {
 	expenses: { [key: number]: Expense[] };
+	editingExpense: Expense | undefined;
 	numberExpenses: number | undefined;
 	getExpensesStatus: string | undefined;
+	getExpenseStatus: string | undefined;
 	addExpenseStatus: string | undefined;
 	editExpenseStatus: string | undefined;
 	currentPageNumber: number;
@@ -28,8 +30,10 @@ export const expensesState: EntityAdapter<Expense> = createEntityAdapter<Expense
 
 export const initialExpensesState: ExpensesState = expensesState.getInitialState({
 	expenses: [],
+	editingExpense: undefined,
 	numberExpenses: undefined,
 	getExpensesStatus: undefined,
+	getExpenseStatus: undefined,
 	addExpenseStatus: undefined,
 	editExpenseStatus: undefined,
 	currentPageNumber: 0,
@@ -53,6 +57,25 @@ const reducer = createReducer(
 		expenses: {},
 		numberExpenses: undefined,
 		getExpensesStatus: CallStatus.error,
+	})),
+
+	// Get expense reducer
+	on(ExpensesStateActions.initGetExpenseByIdState, (state) => ({
+		...state,
+		editingExpenseStatus: undefined,
+	})),
+	on(ExpensesStateActions.getExpenseByIdState, (state) => ({
+		...state,
+		editingExpenseStatus: CallStatus.loading,
+	})),
+	on(ExpensesStateActions.getExpenseByIdStateSuccess, (state, { expense }) => ({
+		...state,
+		editingExpense: expense,
+		editingExpenseStatus: CallStatus.success,
+	})),
+	on(ExpensesStateActions.getExpenseByIdStateFailure, (state) => ({
+		...state,
+		editingExpenseStatus: CallStatus.error,
 	})),
 
 	// Add expense reducer
