@@ -15,7 +15,7 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"@front-lucca-test/expenses": ["libs/pages/expenses/src/index.ts"],
+			"@front-lucca-test/expenses": ["libs/features/expenses/src/index.ts"],
 			"@front-lucca-test/states/expenses-state": ["libs/states/expenses-state/src/index.ts"],
 			"@front-lucca-test/storybook/nova": ["libs/storybook/nova/src/index.ts"]
 		}

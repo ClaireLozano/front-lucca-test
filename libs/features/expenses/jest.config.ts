@@ -3,7 +3,7 @@ export default {
 	displayName: 'expenses',
 	preset: '../../../jest.preset.js',
 	setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-	coverageDirectory: '../../../coverage/libs/pages/expenses',
+	coverageDirectory: '../../../coverage/libs/features/expenses',
 	transform: {
 		'^.+\\.(ts|mjs|js|html)$': [
 			'jest-preset-angular',
