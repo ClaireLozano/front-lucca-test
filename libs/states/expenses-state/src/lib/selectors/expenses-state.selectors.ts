@@ -8,7 +8,6 @@ export const selectEditingExpense = createSelector(selectExpensesState, (state: 
 export const selectNumber = createSelector(selectExpensesState, (state: ExpensesState) => state.numberExpenses);
 export const selectCurrentPageNumber = createSelector(selectExpensesState, (state: ExpensesState) => state.currentPageNumber);
 
-export const selectGetExpenseByIdStatus = createSelector(selectExpensesState, (state: ExpensesState) => state.getExpenseStatus);
 export const selectGetExpensesStatus = createSelector(selectExpensesState, (state: ExpensesState) => state.getExpensesStatus);
 export const selectAddExpenseStatus = createSelector(selectExpensesState, (state: ExpensesState) => state.addExpenseStatus);
 export const selectEditExpenseStatus = createSelector(selectExpensesState, (state: ExpensesState) => state.editExpenseStatus);

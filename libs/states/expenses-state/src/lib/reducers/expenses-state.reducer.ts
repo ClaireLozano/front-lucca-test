@@ -13,12 +13,13 @@ export const CallStatus = {
 
 export interface ExpensesState extends EntityState<Expense> {
 	expenses: { [key: number]: Expense[] };
-	editingExpense: Expense | undefined;
-	numberExpenses: number | undefined;
-	getExpensesStatus: string | undefined;
-	getExpenseStatus: string | undefined;
-	addExpenseStatus: string | undefined;
-	editExpenseStatus: string | undefined;
+	editingExpense?: Expense;
+	numberExpenses?: number;
+	getExpensesStatus?: string;
+	getExpenseStatus?: string;
+	addExpenseStatus?: string;
+	editExpenseStatus?: string;
+	loadEditingExpenseStatus?: string;
 	currentPageNumber: number;
 }
 
@@ -29,20 +30,21 @@ export interface ExpensesStatePartialState {
 export const expensesState: EntityAdapter<Expense> = createEntityAdapter<Expense>();
 
 export const initialExpensesState: ExpensesState = expensesState.getInitialState({
-	expenses: [],
+	expenses: {},
 	editingExpense: undefined,
 	numberExpenses: undefined,
 	getExpensesStatus: undefined,
 	getExpenseStatus: undefined,
 	addExpenseStatus: undefined,
 	editExpenseStatus: undefined,
+	loadEditingExpenseStatus: undefined,
 	currentPageNumber: 0,
 });
 
 const reducer = createReducer(
 	initialExpensesState,
 	// Get expenses reducer
-	on(ExpensesStateActions.initExpensesState, (state) => ({
+	on(ExpensesStateActions.loadExpensesState, (state) => ({
 		...state,
 		getExpensesStatus: CallStatus.loading,
 	})),
@@ -59,23 +61,16 @@ const reducer = createReducer(
 		getExpensesStatus: CallStatus.error,
 	})),
 
-	// Get expense reducer
-	on(ExpensesStateActions.initGetExpenseByIdState, (state) => ({
-		...state,
-		editingExpenseStatus: undefined,
-	})),
-	on(ExpensesStateActions.getExpenseByIdState, (state) => ({
-		...state,
-		editingExpenseStatus: CallStatus.loading,
-	})),
-	on(ExpensesStateActions.getExpenseByIdStateSuccess, (state, { expense }) => ({
+	// Get expense by id reducer
+	on(ExpensesStateActions.loadExpenseByIdStateSuccess, (state, { expense }) => ({
 		...state,
 		editingExpense: expense,
-		editingExpenseStatus: CallStatus.success,
+		loadEditingExpenseStatus: CallStatus.success,
 	})),
-	on(ExpensesStateActions.getExpenseByIdStateFailure, (state) => ({
+	on(ExpensesStateActions.loadExpenseByIdStateFailure, (state) => ({
 		...state,
-		editingExpenseStatus: CallStatus.error,
+		editingExpense: undefined,
+		loadEditingExpenseStatus: CallStatus.error,
 	})),
 
 	// Add expense reducer
@@ -109,6 +104,7 @@ const reducer = createReducer(
 	})),
 	on(ExpensesStateActions.editExpenseStateSuccess, (state) => ({
 		...state,
+		editingExpense: undefined,
 		editExpenseStatus: CallStatus.success,
 	})),
 	on(ExpensesStateActions.editExpenseStateFailure, (state) => ({

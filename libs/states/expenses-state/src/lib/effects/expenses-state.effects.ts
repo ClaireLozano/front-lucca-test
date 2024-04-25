@@ -6,7 +6,6 @@ import { ExpensesService } from '../services/expenses.service';
 import { ResponseGetExpenses } from '../models/get-expenses/get-expenses-response.interface';
 import { RequestAddExpense } from '../models/add-expense/add-expense-request.interface';
 import { RequestEditExpense } from '../models/edit-expense/edit-expense-request.interface';
-import { Expense } from '../models/expense/expense.interface';
 
 @Injectable()
 export class ExpensesStateEffects {
@@ -16,7 +15,7 @@ export class ExpensesStateEffects {
 
 	init$ = createEffect(() =>
 		this.actions$.pipe(
-			ofType(ExpensesStateActions.initExpensesState),
+			ofType(ExpensesStateActions.loadExpensesState),
 			switchMap(() =>
 				this.expensesService.getExpenses({ page: 5, limit: 10 }).pipe(
 					map((result: ResponseGetExpenses) =>
@@ -28,24 +27,12 @@ export class ExpensesStateEffects {
 		),
 	);
 
-	getById$ = createEffect(() =>
-		this.actions$.pipe(
-			filter(({ type }) => type === ExpensesStateActions.getExpenseByIdState.type),
-			switchMap(({ id }: { id: number }) =>
-				this.expensesService.getExpenseById(id).pipe(
-					map((result: Expense) => ExpensesStateActions.getExpenseByIdStateSuccess({ expense: result })),
-					catchError(() => of(ExpensesStateActions.getExpenseByIdStateFailure())),
-				),
-			),
-		),
-	);
-
 	add$ = createEffect(() =>
 		this.actions$.pipe(
 			filter(({ type }) => type === ExpensesStateActions.addExpenseState.type),
 			switchMap(({ request }: { request: RequestAddExpense }) =>
 				this.expensesService.addExpense(request).pipe(
-					map(() => ExpensesStateActions.addExpenseStateSuccess(), ExpensesStateActions.initExpensesState()),
+					map(() => ExpensesStateActions.addExpenseStateSuccess(), ExpensesStateActions.loadExpensesState()),
 					catchError(() => of(ExpensesStateActions.addExpenseStateFailure())),
 				),
 			),

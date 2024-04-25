@@ -1,9 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 
 import * as ExpensesStateActions from '../actions/expenses-state.actions';
 import * as ExpensesStateSelectors from '../selectors/expenses-state.selectors';
 import { RequestAddExpense } from '../models/add-expense/add-expense-request.interface';
+import { ResponseGetExpenses } from '../models/get-expenses/get-expenses-response.interface';
+import { Expense } from '../models/expense/expense.interface';
 import { RequestEditExpense } from '../models/edit-expense/edit-expense-request.interface';
 
 @Injectable()
@@ -11,21 +13,15 @@ export class ExpensesStateFacade {
 	private readonly store = inject(Store);
 
 	/**
-	 * Observables
-	 */
-	public getExpensesStatus$ = this.store.pipe(select(ExpensesStateSelectors.selectGetExpensesStatus));
-	public getExpenseStatus$ = this.store.pipe(select(ExpensesStateSelectors.selectGetExpenseByIdStatus));
-
-	/**
 	 * Signals
 	 */
 	readonly expensesSignal = this.store.selectSignal(ExpensesStateSelectors.selectExpenses);
-	readonly editingExpenseSignal = this.store.selectSignal(ExpensesStateSelectors.selectEditingExpense);
 	readonly numberSignal = this.store.selectSignal(ExpensesStateSelectors.selectNumber);
 	readonly getExpensesStatusSignal = this.store.selectSignal(ExpensesStateSelectors.selectGetExpensesStatus);
 	readonly addExpenseStatusSignal = this.store.selectSignal(ExpensesStateSelectors.selectAddExpenseStatus);
 	readonly editExpenseStatusSignal = this.store.selectSignal(ExpensesStateSelectors.selectEditExpenseStatus);
 	readonly currentPageNumberSignal = this.store.selectSignal(ExpensesStateSelectors.selectCurrentPageNumber);
+	readonly editingExpense = this.store.selectSignal(ExpensesStateSelectors.selectEditingExpense);
 
 	/**
 	 * Functions
@@ -34,8 +30,16 @@ export class ExpensesStateFacade {
 		this.store.dispatch(ExpensesStateActions.initExpensesState());
 	}
 
-	public initGetExpenseById(): void {
-		this.store.dispatch(ExpensesStateActions.initGetExpenseByIdState());
+	public loadExpenses(): void {
+		this.store.dispatch(ExpensesStateActions.loadExpensesState());
+	}
+
+	public loadExpenseByIdStateSuccess(expense: Expense): void {
+		this.store.dispatch(ExpensesStateActions.loadExpenseByIdStateSuccess({ expense }));
+	}
+
+	public setExpenses(result: ResponseGetExpenses): void {
+		this.store.dispatch(ExpensesStateActions.loadExpensesStateSuccess({ expenses: result.items, numberExpenses: result.count }));
 	}
 
 	public initAddExpense(): void {
@@ -44,10 +48,6 @@ export class ExpensesStateFacade {
 
 	public initEditExpense(): void {
 		this.store.dispatch(ExpensesStateActions.initEditExpenseState());
-	}
-
-	public getExpenseById(id: number): void {
-		this.store.dispatch(ExpensesStateActions.getExpenseByIdState({ id: id }));
 	}
 
 	public addExpense(expense: RequestAddExpense): void {

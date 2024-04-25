@@ -3,8 +3,10 @@ import { Expense } from '../models/expense/expense.interface';
 import { RequestAddExpense } from '../models/add-expense/add-expense-request.interface';
 import { RequestEditExpense } from '../models/edit-expense/edit-expense-request.interface';
 
-// Get expenses
 export const initExpensesState = createAction('[ExpensesState Page] Init');
+
+// Get expenses
+export const loadExpensesState = createAction('[ExpensesState Page] Load ExpensesState');
 export const loadExpensesStateSuccess = createAction(
 	'[ExpensesState/API] Load ExpensesState Success',
 	props<{ expenses: Expense[]; numberExpenses: number }>(),
@@ -12,10 +14,8 @@ export const loadExpensesStateSuccess = createAction(
 export const loadExpensesStateFailure = createAction('[ExpensesState/API] Load ExpensesState Failure');
 
 // Get expense by id
-export const initGetExpenseByIdState = createAction('[ExpensesState Page] Get ExpenseState');
-export const getExpenseByIdState = createAction('[ExpensesState/API] Get ExpenseState Loading', props<{ id: number }>());
-export const getExpenseByIdStateSuccess = createAction('[ExpensesState/API] Get ExpenseState Success', props<{ expense: Expense }>());
-export const getExpenseByIdStateFailure = createAction('[ExpensesState/API] Get ExpenseState Failure');
+export const loadExpenseByIdStateSuccess = createAction('[ExpensesState/API] Load ExpenseState Success', props<{ expense: Expense }>());
+export const loadExpenseByIdStateFailure = createAction('[ExpensesState/API] Load ExpenseState Failure');
 
 // Add expense
 export const initAddExpenseState = createAction('[ExpensesState/API] Add ExpenseState Init');

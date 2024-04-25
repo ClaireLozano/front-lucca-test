@@ -6,11 +6,16 @@ import { ExpensesStateModule } from '@front-lucca-test/states/expenses-state';
 import { ExpenseResolver } from './pages/expense-page/resolvers/expense-resolver.service';
 import { ExpensePageComponent } from './pages/expense-page/components/expense-page.component';
 import { AddExpensePageComponent } from './pages/add-expense-page/components/add-expense-page.component';
+import { ErrorExpensePageComponent } from './pages/error-expense-page/components/error-expense-page.component';
 
 export const expensesPageRoutes: Route[] = [
 	{
 		path: 'add',
 		component: AddExpensePageComponent,
+	},
+	{
+		path: 'error',
+		component: ErrorExpensePageComponent,
 	},
 	{
 		path: ':id',

@@ -62,7 +62,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		{ value: NATURE_TRIP, label: 'Trip' },
 	];
 
-	public expense?: Expense = this.expensesFacade.editingExpenseSignal();
+	public expense?: Expense = this.expensesFacade.editingExpense();
 
 	public natureValueSignal!: Signal<NatureType>;
 	public errorFormSignal: Signal<'invalid' | 'pristine' | 'apiError' | undefined> = signal(undefined);
@@ -70,12 +70,6 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	private subscription: Subscription = new Subscription();
 
 	constructor() {
-		if (this.action === 'add') {
-			this.expensesFacade.initAddExpense();
-		} else {
-			this.expensesFacade.initEditExpense();
-		}
-
 		effect(() => {
 			if (this.expensesFacade.editExpenseStatusSignal() === 'error' || this.expensesFacade.addExpenseStatusSignal() === 'error') {
 				this.errorFormSignal = signal('apiError');
@@ -86,7 +80,6 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 		});
 
 		effect(() => {
-			this.expense = this.expensesFacade.editingExpenseSignal();
 			if (this.expense) {
 				this.fillForm();
 				this.cdr.detectChanges;
@@ -164,12 +157,15 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 			}
 
 			const request = getEditExpenseRequest(this.expense.id, this.form);
+
+			this.expensesFacade.initEditExpense();
 			this.expensesFacade.editExpense(request);
 			return;
 		}
 
 		// Add new expense
 		const request = getAddExpenseRequest(this.form);
+		this.expensesFacade.initAddExpense();
 		this.expensesFacade.addExpense(request);
 	}
 

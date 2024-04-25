@@ -14,6 +14,7 @@ import { ExpensesListComponent } from './pages/expenses-page/components/expenses
 import { ExpensePageComponent } from './pages/expense-page/components/expense-page.component';
 import { ExpenseResolver } from './pages/expense-page/resolvers/expense-resolver.service';
 import { AddExpensePageComponent } from './pages/add-expense-page/components/add-expense-page.component';
+import { ErrorExpensePageComponent } from './pages/error-expense-page/components/error-expense-page.component';
 
 @NgModule({
 	declarations: [
@@ -23,6 +24,7 @@ import { AddExpensePageComponent } from './pages/add-expense-page/components/add
 		ExpenseDisplayComponent,
 		ExpensesListComponent,
 		ExpensePageComponent,
+		ErrorExpensePageComponent,
 	],
 	imports: [
 		ExpensesPageRoutingModule,

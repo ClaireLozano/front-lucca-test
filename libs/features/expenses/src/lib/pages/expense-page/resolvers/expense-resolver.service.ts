@@ -1,18 +1,26 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { ExpensesStateFacade } from '@front-lucca-test/states/expenses-state';
-import { Observable, takeWhile } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { Expense, ExpensesService, ExpensesStateFacade } from '@front-lucca-test/states/expenses-state';
+import { EMPTY, Observable, catchError, map } from 'rxjs';
 
 @Injectable()
-export class ExpenseResolver implements Resolve<string | undefined> {
-	constructor(private readonly store: ExpensesStateFacade) {}
+export class ExpenseResolver implements Resolve<Expense> {
+	private service = inject(ExpensesService);
+	private router = inject(Router);
+	private store = inject(ExpensesStateFacade);
 
-	public resolve(route: ActivatedRouteSnapshot): Observable<string | undefined> {
-		this.store.initGetExpenseById();
-
+	public resolve(route: ActivatedRouteSnapshot): Observable<Expense> {
 		const id = route.paramMap.get('id') || '';
-		this.store.getExpenseById(parseInt(id));
 
-		return this.store.getExpenseStatus$.pipe(takeWhile((status) => status !== 'success', true));
+		return this.service.getExpenseById(parseInt(id)).pipe(
+			map((result: Expense) => {
+				this.store.loadExpenseByIdStateSuccess(result);
+				return result;
+			}),
+			catchError(() => {
+				this.router.navigate(['expenses/error']);
+				return EMPTY;
+			}),
+		);
 	}
 }
