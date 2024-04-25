@@ -13,6 +13,10 @@ To format the code, run `npm run format`.
 
 To start the storybook, run `npm run storybook`. Open your browser and navigate to http://localhost:4400/.
 
+To start cypress, run `npx cypress open`. It will open the cypress interface.
+To run cypress tests, run `npx nx run e2e`. It will open the cypress interface.
+https://example.cypress.io/commands/querying
+
 ### TODO
 
 -   typer d'avantage (comme le formulaire par exemple)
