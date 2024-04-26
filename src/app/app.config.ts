@@ -1,14 +1,20 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { appRoutes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
+import { provideClientHydration, withHttpTransferCacheOptions } from '@angular/platform-browser';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
 	providers: [
-		provideClientHydration(),
+		provideHttpClient(withFetch()), //  It's strongly recommended to enable `fetch` for applications that use Server-Side Rendering for better performance and compatibility.
+		provideClientHydration(
+			withHttpTransferCacheOptions({
+				includePostRequests: true,
+			}),
+		),
 		provideRouter(appRoutes, withComponentInputBinding()),
 		importProvidersFrom(
 			StoreModule.forRoot([], {

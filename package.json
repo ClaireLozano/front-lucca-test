@@ -3,7 +3,7 @@
 	"version": "0.0.0",
 	"license": "MIT",
 	"scripts": {
-		"serve": "nx run serve --proxy-config proxy.conf.json",
+		"serve": "nx run serve-ssr --proxy-config proxy.conf.json",
 		"build": "nx build",
 		"test": "nx test",
 		"storybook": "nx storybook storybook-nova",

@@ -16,18 +16,3 @@ To start the storybook, run `npm run storybook`. Open your browser and navigate 
 To start cypress, run `npx cypress open`. It will open the cypress interface.
 To run cypress tests, run `npx nx run e2e`. It will open the cypress interface.
 https://example.cypress.io/commands/querying
-
-### TODO
-
--   typer d'avantage (comme le formulaire par exemple)
--   créer plus de constantes pour les messages, titres, labels, etc.
--   gérer un peu mieux les messages d'erreurs, là je suis allé au plus simple
--   créer des states pour chaques éléments de mon storybook
--   faire une lib par composant de storybook
--   mettre du CSS ♡ et fait un rendu un peu plus jolie
--   plus de test (TU + cypress)
--   meilleure gestion des erreurs, par exemple l'api ne répond pas
--   peut-être regardé pour créer des formulaires dynamiques à partir d'un fichier json en fonction du type de dépense
--   mettre en place des loader et loading page
--   pour les inputs qui n'autorise que des number, j'aurai rajouté des règles de gestion supplémentaire pour ne pas autoriser certains char comme "E"
--   mettre plus de règles ESLint/Prettier, j'ai pas pris le temps de regarder tous ce qui était possible

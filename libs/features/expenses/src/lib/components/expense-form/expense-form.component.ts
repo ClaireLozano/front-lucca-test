@@ -1,12 +1,15 @@
+import { DOCUMENT, isPlatformServer } from '@angular/common';
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	Inject,
 	Input,
 	OnDestroy,
 	OnInit,
 	Output,
+	PLATFORM_ID,
 	Signal,
 	effect,
 	inject,
@@ -25,6 +28,15 @@ import {
 	isTripExpense,
 } from '@front-lucca-test/states/expenses-state';
 import { Subscription } from 'rxjs';
+
+interface ExpenseForm {
+	nature: FormControl<NatureType>;
+	amount: FormControl<number>;
+	comment: FormControl<string>;
+	purchasedOn: FormControl<string>;
+	distance?: FormControl<number>;
+	invites?: FormControl<number>;
+}
 
 @Component({
 	selector: 'exp-expense-form',
@@ -49,7 +61,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 	public amountControl: FormControl = new FormControl('', [Validators.required, Validators.min(0.01)]);
 	public commentControl: FormControl = new FormControl('', Validators.required);
 	public purchasedOnControl: FormControl = new FormControl('', Validators.required);
-	public form: FormGroup = new FormGroup({
+	public form: FormGroup<ExpenseForm> = new FormGroup({
 		nature: this.natureControl,
 		amount: this.amountControl,
 		comment: this.commentControl,
@@ -69,7 +81,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 
 	private subscription: Subscription = new Subscription();
 
-	constructor() {
+	constructor(@Inject(PLATFORM_ID) private platformId: object, @Inject(DOCUMENT) private document: Document) {
 		effect(() => {
 			if (this.expensesFacade.editExpenseStatusSignal() === 'error' || this.expensesFacade.addExpenseStatusSignal() === 'error') {
 				this.errorFormSignal = signal('apiError');
@@ -103,7 +115,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 
 	private initForm(): void {
 		if (this.action === 'edit') {
-			this.natureControl.disable();
+			this.form.get('nature')?.disable();
 		}
 		this.setSpecialControl(this.expense?.nature || NATURE_RESTAURANT);
 	}
@@ -141,6 +153,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 
 		if (!this.form.valid) {
 			this.errorFormSignal = signal('invalid');
+			this.scrollToFirstInvalidControl();
 			return;
 		}
 
@@ -186,5 +199,15 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 			return;
 		}
 		this.form.get('invites')?.patchValue(this.expense.invites);
+	}
+
+	private scrollToFirstInvalidControl() {
+		if (isPlatformServer(this.platformId)) {
+			return;
+		}
+		const form = this.document.getElementsByTagName('form')[0];
+		const firstInvalidControl = form.getElementsByClassName('ng-invalid')[0];
+		firstInvalidControl.scrollIntoView();
+		(firstInvalidControl as HTMLElement).focus();
 	}
 }
