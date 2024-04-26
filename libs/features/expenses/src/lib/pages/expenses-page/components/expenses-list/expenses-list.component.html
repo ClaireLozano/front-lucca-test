@@ -4,22 +4,25 @@
 
 <!-- Display expenses -->
 <h2>Liste des dépenses :</h2>
+@defer {
 <ul>
 	@for (expense of expensesSignal()[actualPageNumberSignal()]; track expense.id) {
 	<li>
 		<exp-expense-display [expense]="expense" (clickedExpenseEmitter)="editExpense($event)"> </exp-expense-display>
 	</li>
 	}
-
-	<!-- Pagination -->
-	<div>
-		<nova-button
-			*ngFor="let key of numberOfPagesSignal()"
-			[id]="'page-' + key"
-			[label]="key.toString()"
-			[pressed]="actualPageNumberSignal().toString() === key ? true : false"
-			(click)="pageNumberClick(key.toString())"
-		>
-		</nova-button>
-	</div>
 </ul>
+} @placeholder (minimum 1000ms) {
+<p>Loading ...</p>
+}
+<!-- Pagination -->
+<div>
+	<nova-button
+		*ngFor="let key of numberOfPagesSignal()"
+		[id]="'page-' + key"
+		[label]="key.toString()"
+		[pressed]="actualPageNumberSignal().toString() === key ? true : false"
+		(click)="pageNumberClick(key.toString())"
+	>
+	</nova-button>
+</div>

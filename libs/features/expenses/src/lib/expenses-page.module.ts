@@ -11,8 +11,8 @@ import { ExpensesResolver } from './pages/expenses-page/resolvers/expenses-resol
 import { ExpensesStateModule } from '@front-lucca-test/states/expenses-state';
 import { ExpensesPageComponent } from './pages/expenses-page/components/expenses-page/expenses-page.component';
 import { ExpensesListComponent } from './pages/expenses-page/components/expenses-list/expenses-list.component';
-import { ExpensePageComponent } from './pages/expense-page/components/expense-page.component';
-import { ExpenseResolver } from './pages/expense-page/resolvers/expense-resolver.service';
+import { EditExpensePageComponent } from './pages/edit-expense-page/components/edit-expense-page.component';
+import { ExpenseResolver } from './pages/edit-expense-page/resolvers/expense-resolver.service';
 import { AddExpensePageComponent } from './pages/add-expense-page/components/add-expense-page.component';
 import { ErrorExpensePageComponent } from './pages/error-expense-page/components/error-expense-page.component';
 
@@ -23,7 +23,7 @@ import { ErrorExpensePageComponent } from './pages/error-expense-page/components
 		ExpenseFormComponent,
 		ExpenseDisplayComponent,
 		ExpensesListComponent,
-		ExpensePageComponent,
+		EditExpensePageComponent,
 		ErrorExpensePageComponent,
 	],
 	imports: [

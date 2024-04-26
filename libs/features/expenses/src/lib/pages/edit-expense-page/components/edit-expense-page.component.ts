@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-	selector: 'exp-expense-page',
-	templateUrl: './expense-page.component.html',
+	selector: 'exp-edit-expense-page',
+	templateUrl: './edit-expense-page.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExpensePageComponent {
+export class EditExpensePageComponent {
 	private router = inject(Router);
 
 	public cancelForm(): void {
