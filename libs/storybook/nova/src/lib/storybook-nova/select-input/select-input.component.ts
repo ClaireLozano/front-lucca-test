@@ -18,14 +18,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 		@if(isRequired) {*}
 		<br />
-		<select
-			[formControl]="control"
-			rows="4"
-			cols="50"
-			[disabled]="isDisabled"
-			[required]="isRequired"
-			[class.error-input]="control.invalid && control.touched"
-		>
+		<select [formControl]="control" rows="4" cols="50" [required]="isRequired" [class.error-input]="control.invalid && control.touched">
 			<option *ngFor="let option of options" [value]="option.value">
 				{{ option.label }}
 			</option>
@@ -47,7 +40,4 @@ export class SelectInputComponent {
 
 	@Input()
 	public isRequired: boolean = false;
-
-	@Input()
-	public isDisabled: boolean = false;
 }

@@ -4,15 +4,7 @@
 
 <!-- Form -->
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-	<nova-select-input
-		[control]="natureControl"
-		[label]="'Nature'"
-		[isDisabled]="this.action === 'edit'"
-		[name]="'nature'"
-		[options]="options"
-		[isRequired]="true"
-	>
-	</nova-select-input>
+	<nova-select-input [control]="natureControl" [label]="'Nature'" [name]="'nature'" [options]="options" [isRequired]="true"> </nova-select-input>
 	<br /><br />
 	<nova-input
 		[control]="amountControl"

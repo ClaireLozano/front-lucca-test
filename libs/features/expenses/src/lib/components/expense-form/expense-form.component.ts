@@ -4,7 +4,6 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	Inject,
 	Input,
 	OnDestroy,
 	OnInit,
@@ -28,15 +27,7 @@ import {
 	isTripExpense,
 } from '@front-lucca-test/states/expenses-state';
 import { Subscription } from 'rxjs';
-
-interface ExpenseForm {
-	nature: FormControl<NatureType>;
-	amount: FormControl<number>;
-	comment: FormControl<string>;
-	purchasedOn: FormControl<string>;
-	distance?: FormControl<number>;
-	invites?: FormControl<number>;
-}
+import { ExpenseForm } from './expense-form.interface';
 
 @Component({
 	selector: 'exp-expense-form',
@@ -46,6 +37,8 @@ interface ExpenseForm {
 export class ExpenseFormComponent implements OnInit, OnDestroy {
 	private expensesFacade = inject(ExpensesStateFacade);
 	private cdr = inject(ChangeDetectorRef);
+	private platformId = inject(PLATFORM_ID);
+	private document = inject(DOCUMENT);
 
 	@Input({ required: true })
 	public title!: string;
@@ -81,7 +74,7 @@ export class ExpenseFormComponent implements OnInit, OnDestroy {
 
 	private subscription: Subscription = new Subscription();
 
-	constructor(@Inject(PLATFORM_ID) private platformId: object, @Inject(DOCUMENT) private document: Document) {
+	constructor() {
 		effect(() => {
 			if (this.expensesFacade.editExpenseStatusSignal() === 'error' || this.expensesFacade.addExpenseStatusSignal() === 'error') {
 				this.errorFormSignal = signal('apiError');
