@@ -132,7 +132,6 @@ function restructureExpenses(expenses: Expense[], chunkSize: number): { [key: nu
 		}
 
 		result[chunkIndex].push(expense);
-
 		return result;
 	}, {});
 }
