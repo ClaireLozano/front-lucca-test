@@ -48,10 +48,10 @@ const reducer = createReducer(
 		...state,
 		getExpensesStatus: CallStatus.loading,
 	})),
-	on(ExpensesStateActions.loadExpensesStateSuccess, (state, { expenses, numberExpenses }) => ({
+	on(ExpensesStateActions.loadExpensesStateSuccess, (state, { expenses }) => ({
 		...state,
 		expenses: restructureExpenses(expenses, 5),
-		numberExpenses: numberExpenses,
+		numberExpenses: expenses.length,
 		getExpensesStatus: CallStatus.success,
 	})),
 	on(ExpensesStateActions.loadExpensesStateFailure, (state) => ({
@@ -65,11 +65,13 @@ const reducer = createReducer(
 	on(ExpensesStateActions.loadExpenseByIdStateSuccess, (state, { expense }) => ({
 		...state,
 		editingExpense: expense,
+		editExpenseStatus: undefined,
 		loadEditingExpenseStatus: CallStatus.success,
 	})),
 	on(ExpensesStateActions.loadExpenseByIdStateFailure, (state) => ({
 		...state,
 		editingExpense: undefined,
+		editExpenseStatus: undefined,
 		loadEditingExpenseStatus: CallStatus.error,
 	})),
 
@@ -106,10 +108,15 @@ const reducer = createReducer(
 		...state,
 		editingExpense: undefined,
 		editExpenseStatus: CallStatus.success,
+		getExpenseStatus: undefined,
+		loadEditingExpenseStatus: undefined,
 	})),
 	on(ExpensesStateActions.editExpenseStateFailure, (state) => ({
 		...state,
 		editExpenseStatus: CallStatus.error,
+		getExpenseStatus: undefined,
+		loadEditingExpenseStatus: undefined,
+		editingExpense: undefined,
 	})),
 
 	// Current page number
@@ -124,6 +131,10 @@ export function expensesStateReducer(state: ExpensesState | undefined, action: A
 }
 
 function restructureExpenses(expenses: Expense[], chunkSize: number): { [key: number]: Expense[] } {
+	if (!expenses) {
+		return [];
+	}
+
 	return expenses.reduce((result: { [key: number]: Expense[] }, expense: Expense, index: number) => {
 		const chunkIndex = Math.floor(index / chunkSize);
 

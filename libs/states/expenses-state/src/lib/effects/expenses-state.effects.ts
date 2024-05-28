@@ -3,9 +3,9 @@ import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { catchError, of, map, switchMap, filter } from 'rxjs';
 import * as ExpensesStateActions from '../actions/expenses-state.actions';
 import { ExpensesService } from '../services/expenses.service';
-import { ResponseGetExpenses } from '../models/get-expenses/get-expenses-response.interface';
 import { RequestAddExpense } from '../models/add-expense/add-expense-request.interface';
 import { RequestEditExpense } from '../models/edit-expense/edit-expense-request.interface';
+import { Expense } from '../models/expense/expense.interface';
 
 @Injectable()
 export class ExpensesStateEffects {
@@ -17,10 +17,8 @@ export class ExpensesStateEffects {
 		this.actions$.pipe(
 			ofType(ExpensesStateActions.loadExpensesState),
 			switchMap(() =>
-				this.expensesService.getExpenses({ page: 5, limit: 10 }).pipe(
-					map((result: ResponseGetExpenses) =>
-						ExpensesStateActions.loadExpensesStateSuccess({ expenses: result.items, numberExpenses: result.count }),
-					),
+				this.expensesService.getExpenses().pipe(
+					map((result: Expense[]) => ExpensesStateActions.loadExpensesStateSuccess({ expenses: result })),
 					catchError(() => of(ExpensesStateActions.loadExpensesStateFailure())),
 				),
 			),

@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import * as ExpensesStateActions from '../actions/expenses-state.actions';
 import * as ExpensesStateSelectors from '../selectors/expenses-state.selectors';
 import { RequestAddExpense } from '../models/add-expense/add-expense-request.interface';
-import { ResponseGetExpenses } from '../models/get-expenses/get-expenses-response.interface';
 import { Expense } from '../models/expense/expense.interface';
 import { RequestEditExpense } from '../models/edit-expense/edit-expense-request.interface';
 
@@ -38,8 +37,8 @@ export class ExpensesStateFacade {
 		this.store.dispatch(ExpensesStateActions.loadExpenseByIdStateSuccess({ expense }));
 	}
 
-	public setExpenses(result: ResponseGetExpenses): void {
-		this.store.dispatch(ExpensesStateActions.loadExpensesStateSuccess({ expenses: result.items, numberExpenses: result.count }));
+	public setExpenses(result: Expense[]): void {
+		this.store.dispatch(ExpensesStateActions.loadExpensesStateSuccess({ expenses: result }));
 	}
 
 	public initAddExpense(): void {

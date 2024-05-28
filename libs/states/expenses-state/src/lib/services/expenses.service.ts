@@ -1,10 +1,9 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Expense } from '../models/expense/expense.interface';
 import { RequestAddTripExpense, RequestAddRestaurantExpense } from '../models/add-expense/add-expense-request.interface';
 import { RequestEditTripExpense, RequestEditRestaurantExpense } from '../models/edit-expense/edit-expense-request.interface';
-import { ResponseGetExpenses } from '../models/get-expenses/get-expenses-response.interface';
 
 // Todo
 const environment = {
@@ -18,12 +17,8 @@ export class ExpensesService {
 	/**
 	 * Get all expenses
 	 */
-	public getExpenses({ page, limit }: { page: number; limit: number }): Observable<ResponseGetExpenses> {
-		const params = new HttpParams();
-		params.append('page', page);
-		params.append('limit', limit);
-
-		return this.http.get<ResponseGetExpenses>(`${environment.expenseApiUrl}/expenses`);
+	public getExpenses(): Observable<Expense[]> {
+		return this.http.get<Expense[]>(`${environment.expenseApiUrl}/expenses`);
 	}
 
 	/**

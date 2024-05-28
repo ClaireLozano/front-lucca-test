@@ -7,10 +7,7 @@ export const initExpensesState = createAction('[ExpensesState Page] Init');
 
 // Get expenses
 export const loadExpensesState = createAction('[ExpensesState Page] Load ExpensesState');
-export const loadExpensesStateSuccess = createAction(
-	'[ExpensesState/API] Load ExpensesState Success',
-	props<{ expenses: Expense[]; numberExpenses: number }>(),
-);
+export const loadExpensesStateSuccess = createAction('[ExpensesState/API] Load ExpensesState Success', props<{ expenses: Expense[] }>());
 export const loadExpensesStateFailure = createAction('[ExpensesState/API] Load ExpensesState Failure');
 
 // Get expense by id

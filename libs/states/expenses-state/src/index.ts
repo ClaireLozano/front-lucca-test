@@ -10,4 +10,3 @@ export * from './lib/services/expenses.service';
 export * from './lib/models/add-expense/add-expense-request.interface';
 export * from './lib/models/edit-expense/edit-expense-request.interface';
 export * from './lib/models/expense/expense.interface';
-export * from './lib/models/get-expenses/get-expenses-response.interface';
