@@ -1,0 +1,7 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
+	<div class="input-group">
+		<nova-input [control]="emailControl" name="email" label="email" /><br />
+		<nova-input [control]="passwordControl" name="password" label="password" />
+		<nova-button label="Login" />
+	</div>
+</form>

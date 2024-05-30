@@ -1,0 +1,17 @@
+.form-container {
+	display: flex;
+	justify-content: right;
+}
+
+.input-group {
+	display: flex;
+	align-items: right;
+}
+
+.input-group nova-input {
+	margin-right: 10px;
+}
+
+.input-group nova-button {
+	margin-left: 10px;
+}
