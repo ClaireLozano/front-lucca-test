@@ -15,6 +15,7 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
+			"@front-lucca-test/states/auth": ["libs/states/auth-state/src/index.ts"],
 			"@front-lucca-test/expenses": ["libs/features/expenses/src/index.ts"],
 			"@front-lucca-test/login": ["libs/features/login/src/index.ts"],
 			"@front-lucca-test/states/expenses-state": ["libs/states/expenses-state/src/index.ts"],
