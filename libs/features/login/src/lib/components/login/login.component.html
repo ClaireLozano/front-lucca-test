@@ -1,7 +1,13 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
-	<div class="input-group">
-		<nova-input [control]="emailControl" name="email" label="email" /><br />
-		<nova-input [control]="passwordControl" name="password" label="password" />
-		<nova-button label="Login" />
-	</div>
-</form>
+<div class="form-container">
+	@if (!this.authFeature.isConnected()) {
+	<form [formGroup]="form" (ngSubmit)="onSubmit()">
+		<div class="input-group">
+			<nova-input [control]="emailControl" name="email" label="email" /><br />
+			<nova-input [control]="passwordControl" name="password" label="password" />
+			<nova-button (click)="onSubmit()" label="Login" />
+		</div>
+	</form>
+	} @else {
+	<div class="input-group">Connected !</div>
+	}
+</div>

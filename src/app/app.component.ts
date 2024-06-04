@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LoginComponent } from '@front-lucca-test/login';
-import { AuthStateFacade, AuthStateModule } from '@front-lucca-test/states/auth';
+import { AuthStateModule, injectAuthFeature } from '@front-lucca-test/states/auth';
 
 @Component({
 	standalone: true,
@@ -10,9 +10,11 @@ import { AuthStateFacade, AuthStateModule } from '@front-lucca-test/states/auth'
 	template: '<front-lucca-test-login></front-lucca-test-login><router-outlet></router-outlet>',
 })
 export class AppComponent {
-	constructor(private authStateFacade: AuthStateFacade) {}
+	constructor() {}
+
+	readonly authFeature = injectAuthFeature();
 
 	ngOnInit(): void {
-		this.authStateFacade.init();
+		this.authFeature.init();
 	}
 }
