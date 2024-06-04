@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { SignInResponse } from './models/sign-in-response.interface';
+import { SignInRequest } from './models/sign-in-request.interface';
 
 // Todo
 const environment = {
@@ -14,8 +16,8 @@ export class AuthService {
 	/**
 	 * Sign in
 	 */
-	public signIn({ email, password }: { email: string; password: string }): Observable<{ email: string; name: string; id: number }> {
-		return this.http.post<{ email: string; name: string; id: number }>(`${environment.expenseApiUrl}/auth/login`, { email, password });
+	public signIn({ email, password }: SignInRequest): Observable<SignInResponse> {
+		return this.http.post<SignInResponse>(`${environment.expenseApiUrl}/auth/login`, { email, password });
 	}
 
 	/**

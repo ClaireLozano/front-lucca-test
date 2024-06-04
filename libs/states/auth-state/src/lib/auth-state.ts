@@ -4,19 +4,9 @@ import { catchError, map, of, switchMap } from 'rxjs';
 
 import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
-
-// Models
-export type User = {
-	id: number;
-	name: string;
-	email: string;
-};
-
-export type AuthState = {
-	user?: User;
-	isConnected: boolean;
-	signInError: boolean;
-};
+import { SignInRequest } from './models/sign-in-request.interface';
+import { SignInResponse } from './models/sign-in-response.interface';
+import { AuthState } from './models/auth.type';
 
 export const initialState: AuthState = {
 	user: undefined,
@@ -29,8 +19,8 @@ export const authActions = createActionGroup({
 	source: 'AuthState',
 	events: {
 		init: emptyProps(),
-		signIn: props<{ email: string; password: string }>(),
-		signInSuccess: props<{ id: number; email: string; name: string }>(),
+		signIn: props<SignInRequest>(),
+		signInSuccess: props<SignInResponse>(),
 		signInError: emptyProps(),
 		signOut: emptyProps(),
 	},
@@ -45,7 +35,7 @@ export const authFeature = createFeature({
 		on(authActions.init, () => ({
 			...initialState,
 		})),
-		on(authActions.signInSuccess, (state: AuthState, action: { id: number; name: string; email: string }) => ({
+		on(authActions.signInSuccess, (state: AuthState, action: SignInResponse) => ({
 			...state,
 			user: {
 				id: action.id,
@@ -94,7 +84,7 @@ export function injectAuthFeature() {
 
 	return {
 		init: () => store.dispatch(authActions.init()),
-		signIn: ({ email, password }: { email: string; password: string }) => store.dispatch(authActions.signIn({ email, password })),
+		signIn: ({ email, password }: SignInRequest) => store.dispatch(authActions.signIn({ email, password })),
 		signOut: () => store.dispatch(authActions.signOut()),
 		isConnected: store.selectSignal(authFeature.selectIsConnected),
 	};
