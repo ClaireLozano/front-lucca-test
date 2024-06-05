@@ -12,6 +12,7 @@ export const initialState: AuthState = {
 	user: undefined,
 	isConnected: false,
 	signInError: false,
+	token: undefined,
 };
 
 // Actions
@@ -37,11 +38,8 @@ export const authFeature = createFeature({
 		})),
 		on(authActions.signInSuccess, (state: AuthState, action: SignInResponse) => ({
 			...state,
-			user: {
-				id: action.id,
-				name: action.name,
-				email: action.email,
-			},
+			user: action.user,
+			token: action.token,
 			isConnected: true,
 			signInError: false,
 		})),
@@ -52,6 +50,7 @@ export const authFeature = createFeature({
 		on(authActions.signOut, (state: AuthState) => ({
 			...state,
 			user: undefined,
+			token: undefined,
 			isConnected: false,
 		})),
 	),
@@ -87,5 +86,6 @@ export function injectAuthFeature() {
 		signIn: ({ email, password }: SignInRequest) => store.dispatch(authActions.signIn({ email, password })),
 		signOut: () => store.dispatch(authActions.signOut()),
 		isConnected: store.selectSignal(authFeature.selectIsConnected),
+		user: store.selectSignal(authFeature.selectUser),
 	};
 }

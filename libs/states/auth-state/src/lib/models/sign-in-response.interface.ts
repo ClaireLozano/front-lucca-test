@@ -1,5 +1,6 @@
+import { User } from './auth.type';
+
 export interface SignInResponse {
-	email: string;
-	name: string;
-	id: number;
+	user: User;
+	token: string;
 }

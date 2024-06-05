@@ -8,4 +8,5 @@ export type AuthState = {
 	user?: User;
 	isConnected: boolean;
 	signInError: boolean;
+	token?: string;
 };
