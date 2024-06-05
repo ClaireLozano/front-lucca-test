@@ -13,17 +13,23 @@ const environment = {
 export class AuthService {
 	constructor(private http: HttpClient) {}
 
-	/**
-	 * Sign in
-	 */
 	public signIn({ email, password }: SignInRequest): Observable<SignInResponse> {
 		return this.http.post<SignInResponse>(`${environment.expenseApiUrl}/auth/login`, { email, password });
 	}
 
-	/**
-	 * SignOut
-	 */
 	public signOut(): Observable<void> {
 		return this.http.get<void>(`${environment.expenseApiUrl}/auth/logout`);
+	}
+
+	public setToken(token: string): void {
+		localStorage.setItem('token', token);
+	}
+
+	public removeToken(): void {
+		localStorage.removeItem('token');
+	}
+
+	public getToken(): string | null {
+		return localStorage.getItem('token');
 	}
 }

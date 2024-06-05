@@ -26,4 +26,8 @@ export class LoginComponent {
 		// todo check if empty
 		this.authFeature.signIn({ email: this.form.controls?.['email'].value, password: this.form.controls?.['password'].value });
 	}
+
+	public onSubmitLogout(): void {
+		this.authFeature.signOut();
+	}
 }

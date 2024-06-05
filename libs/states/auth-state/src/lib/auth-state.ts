@@ -1,6 +1,6 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store, createActionGroup, createFeature, createReducer, createSelector, emptyProps, on, props } from '@ngrx/store';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, map, of, switchMap, tap } from 'rxjs';
 
 import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
@@ -60,7 +60,7 @@ export const authFeature = createFeature({
 });
 
 // Effects
-export const signInEffect = createEffect(
+const signInEffect = createEffect(
 	(actions$ = inject(Actions)) => {
 		const authService = inject(AuthService);
 
@@ -76,6 +76,32 @@ export const signInEffect = createEffect(
 	},
 	{ functional: true },
 );
+
+const signInSuccessEffect = createEffect(
+	(actions$ = inject(Actions)) => {
+		const authService = inject(AuthService);
+
+		return actions$.pipe(
+			ofType(authActions.signInSuccess),
+			tap((request) => authService.setToken(request.token)),
+		);
+	},
+	{ functional: true },
+);
+
+const signOutEffect = createEffect(
+	(actions$ = inject(Actions)) => {
+		const authService = inject(AuthService);
+
+		return actions$.pipe(
+			ofType(authActions.signOut),
+			tap(() => authService.removeToken()),
+		);
+	},
+	{ functional: true },
+);
+
+export const effects = { signInSuccessEffect, signInEffect, signOutEffect };
 
 // Facades
 export function injectAuthFeature() {
