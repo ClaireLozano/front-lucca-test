@@ -28,7 +28,7 @@ export const appConfig: ApplicationConfig = {
 			}),
 			StoreDevtoolsModule.instrument({
 				maxAge: 25,
-				logOnly: true,
+				logOnly: false,
 			}),
 			EffectsModule.forRoot([]),
 		),

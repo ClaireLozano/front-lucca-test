@@ -61,7 +61,8 @@ export const authFeature = createFeature({
 
 // Effects
 const signInEffect = createEffect(
-	(actions$ = inject(Actions)) => {
+	() => {
+		const actions$ = inject(Actions);
 		const authService = inject(AuthService);
 
 		return actions$.pipe(
@@ -78,27 +79,23 @@ const signInEffect = createEffect(
 );
 
 const signInSuccessEffect = createEffect(
-	(actions$ = inject(Actions)) => {
-		const authService = inject(AuthService);
-
+	(actions$ = inject(Actions), authService = inject(AuthService)) => {
 		return actions$.pipe(
 			ofType(authActions.signInSuccess),
 			tap((request) => authService.setToken(request.token)),
 		);
 	},
-	{ functional: true },
+	{ dispatch: false, functional: true },
 );
 
 const signOutEffect = createEffect(
-	(actions$ = inject(Actions)) => {
-		const authService = inject(AuthService);
-
+	(actions$ = inject(Actions), authService = inject(AuthService)) => {
 		return actions$.pipe(
 			ofType(authActions.signOut),
 			tap(() => authService.removeToken()),
 		);
 	},
-	{ functional: true },
+	{ dispatch: false, functional: true },
 );
 
 export const effects = { signInSuccessEffect, signInEffect, signOutEffect };
