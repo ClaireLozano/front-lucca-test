@@ -1,6 +1,6 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store, createActionGroup, createFeature, createReducer, createSelector, emptyProps, on, props } from '@ngrx/store';
-import { catchError, concat, concatMap, from, map, merge, of, switchMap, tap } from 'rxjs';
+import { catchError, concat, concatMap, from, map, of, switchMap, tap } from 'rxjs';
 
 import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
