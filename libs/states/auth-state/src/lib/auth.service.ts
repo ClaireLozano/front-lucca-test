@@ -21,6 +21,10 @@ export class AuthService {
 		return this.http.get<void>(`${environment.expenseApiUrl}/auth/logout`);
 	}
 
+	public getUser(): Observable<void> {
+		return this.http.get<void>(`${environment.expenseApiUrl}/users/`);
+	}
+
 	public setToken(token: string): void {
 		localStorage.setItem('token', token);
 	}
