@@ -1,12 +1,12 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store, createActionGroup, createFeature, createReducer, createSelector, emptyProps, on, props } from '@ngrx/store';
-import { catchError, map, of, switchMap, tap } from 'rxjs';
+import { catchError, concat, concatMap, from, map, merge, of, switchMap, tap } from 'rxjs';
 
 import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
 import { SignInRequest } from './models/sign-in-request.interface';
 import { SignInResponse } from './models/sign-in-response.interface';
-import { AuthState } from './models/auth.type';
+import { AuthState, User } from './models/auth.type';
 
 export const initialState: AuthState = {
 	user: undefined,
@@ -22,6 +22,7 @@ export const authActions = createActionGroup({
 		init: emptyProps(),
 		signIn: props<SignInRequest>(),
 		signInSuccess: props<SignInResponse>(),
+		authenticate: props<SignInResponse>(),
 		signInError: emptyProps(),
 		signOut: emptyProps(),
 	},
@@ -36,7 +37,7 @@ export const authFeature = createFeature({
 		on(authActions.init, () => ({
 			...initialState,
 		})),
-		on(authActions.signInSuccess, (state: AuthState, action: SignInResponse) => ({
+		on(authActions.authenticate, (state: AuthState, action: SignInResponse) => ({
 			...state,
 			user: action.user,
 			token: action.token,
@@ -69,7 +70,7 @@ const signInEffect = createEffect(
 			ofType(authActions.signIn),
 			switchMap((request) =>
 				authService.signIn(request).pipe(
-					map((auth) => authActions.signInSuccess(auth)),
+					concatMap((auth) => concat(of(authActions.signInSuccess(auth)), of(authActions.authenticate(auth)))),
 					catchError(() => of(authActions.signInError())),
 				),
 			),
@@ -98,7 +99,23 @@ const signOutEffect = createEffect(
 	{ dispatch: false, functional: true },
 );
 
-export const effects = { signInSuccessEffect, signInEffect, signOutEffect };
+export const initEffect = createEffect(
+	(actions$ = inject(Actions), authService = inject(AuthService)) => {
+		return actions$.pipe(
+			ofType(authActions.init),
+			switchMap(() => {
+				const token = authService.getToken();
+				if (token) {
+					return from(authService.authenticate()).pipe(map((user: User) => authActions.authenticate({ user, token })));
+				}
+				return of();
+			}),
+		);
+	},
+	{ functional: true },
+);
+
+export const effects = { signInSuccessEffect, signInEffect, signOutEffect, initEffect };
 
 // Facades
 export function injectAuthFeature() {

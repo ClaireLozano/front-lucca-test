@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LoginComponent } from '@front-lucca-test/login';
@@ -5,7 +6,7 @@ import { AuthStateModule, injectAuthFeature } from '@front-lucca-test/states/aut
 
 @Component({
 	standalone: true,
-	imports: [RouterModule, LoginComponent, AuthStateModule],
+	imports: [HttpClientModule, RouterModule, LoginComponent, AuthStateModule],
 	selector: 'front-lucca-test-root',
 	template: '<front-lucca-test-login></front-lucca-test-login><router-outlet></router-outlet>',
 })
